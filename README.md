@@ -26,6 +26,10 @@ $ sudo apt-get install curl
 $ sudo yum install curl
 ```
 
+<p>
+<img src="screenshots/odoo-18-docker-compose.gif" width="100%">
+</p>
+
 ## Usage
 
 Start the container:
@@ -126,10 +130,18 @@ server {
 
 ## Odoo 18.0 screenshots after successful installation.
 
+<p align="center">
 <img src="screenshots/odoo-18-welcome-screenshot.png" width="50%">
+</p>
 
+<p>
 <img src="screenshots/odoo-18-apps-screenshot.png" width="100%">
+</p>
 
+<p>
 <img src="screenshots/odoo-18-sales-screen.png" width="100%">
+</p>
 
+<p>
 <img src="screenshots/odoo-18-product-form.png" width="100%">
+</p>
