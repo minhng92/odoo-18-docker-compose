@@ -14,17 +14,30 @@ mkdir -p $DESTINATION/postgresql
 sudo chown -R $USER:$USER $DESTINATION
 sudo chmod -R 700 $DESTINATION  # Only the user has access
 
-# System configuration
-if grep -qF "fs.inotify.max_user_watches" /etc/sysctl.conf; then 
+# Check if running on macOS
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  echo "Running on macOS. Skipping inotify configuration."
+else
+  # System configuration
+  if grep -qF "fs.inotify.max_user_watches" /etc/sysctl.conf; then
     echo $(grep -F "fs.inotify.max_user_watches" /etc/sysctl.conf)
-else 
+  else
     echo "fs.inotify.max_user_watches = 524288" | sudo tee -a /etc/sysctl.conf
+  fi
+  sudo sysctl -p
 fi
-sudo sysctl -p
 
 # Set ports in docker-compose.yml
-sed -i 's/10018/'$PORT'/g' $DESTINATION/docker-compose.yml
-sed -i 's/20018/'$CHAT'/g' $DESTINATION/docker-compose.yml
+# Update docker-compose configuration
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  # macOS sed syntax
+  sed -i '' 's/10018/'$PORT'/g' $DESTINATION/docker-compose.yml
+  sed -i '' 's/20018/'$CHAT'/g' $DESTINATION/docker-compose.yml
+else
+  # Linux sed syntax
+  sed -i 's/10018/'$PORT'/g' $DESTINATION/docker-compose.yml
+  sed -i 's/20018/'$CHAT'/g' $DESTINATION/docker-compose.yml
+fi
 
 # Set file and directory permissions after installation
 find $DESTINATION -type f -exec chmod 644 {} \;
