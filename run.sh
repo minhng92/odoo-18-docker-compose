@@ -1,18 +1,17 @@
 #!/bin/bash
-DESTINATION=$1
-PORT=$2
-CHAT=$3
+
+source .env
 
 # Clone Odoo directory
-git clone --depth=1 https://github.com/minhng92/odoo-18-docker-compose $DESTINATION
-rm -rf $DESTINATION/.git
+git clone --depth=1 https://github.com/Citrullin/odoo-18-docker-compose $ODOO_GIT_DEST
+rm -rf $ODOO_GIT_DEST/.git
 
 # Create PostgreSQL directory
-mkdir -p $DESTINATION/postgresql
+mkdir -p $ODOO_GIT_DEST/postgresql
 
 # Change ownership to current user and set restrictive permissions for security
-sudo chown -R $USER:$USER $DESTINATION
-sudo chmod -R 700 $DESTINATION  # Only the user has access
+sudo chown -R $USER:$USER $ODOO_GIT_DEST
+sudo chmod -R 700 $ODOO_GIT_DEST  # Only the user has access
 
 # Check if running on macOS
 if [[ "$OSTYPE" == "darwin"* ]]; then
@@ -31,19 +30,29 @@ fi
 # Update docker-compose configuration
 if [[ "$OSTYPE" == "darwin"* ]]; then
   # macOS sed syntax
-  sed -i '' 's/10018/'$PORT'/g' $DESTINATION/docker-compose.yml
-  sed -i '' 's/20018/'$CHAT'/g' $DESTINATION/docker-compose.yml
+  sed -i '' 's/$ODOO_PORT/'$ODOO_PORT'/g' $ODOO_GIT_DEST/docker-compose.yml
+  sed -i '' 's/$ODOO_PORT/'$ODOO_CHAT_PORT'/g' $ODOO_GIT_DEST/docker-compose.yml
+  sed -i '' 's/$POSTGRES_USER/'$POSTGRES_USER'/g' $ODOO_GIT_DEST/docker-compose.yml
+  sed -i '' 's/$POSTGRES_PASSWORD/'$POSTGRES_PASSWORD'/g' $ODOO_GIT_DEST/docker-compose.yml
+  sed -i '' 's/$POSTGRES_DB/'$POSTGRES_DB'/g' $ODOO_GIT_DEST/docker-compose.yml
 else
   # Linux sed syntax
-  sed -i 's/10018/'$PORT'/g' $DESTINATION/docker-compose.yml
-  sed -i 's/20018/'$CHAT'/g' $DESTINATION/docker-compose.yml
+  sed -i 's/$ODOO_PORT/'$ODOO_PORT'/g' $ODOO_GIT_DEST/docker-compose.yml
+  sed -i 's/$ODOO_CHAT_PORT/'$ODOO_CHAT_PORT'/g' $ODOO_GIT_DEST/docker-compose.yml
+  sed -i 's/$POSTGRES_USER/'$POSTGRES_USER'/g' $ODOO_GIT_DEST/docker-compose.yml
+  sed -i 's/$POSTGRES_PASSWORD/'$POSTGRES_PASSWORD'/g' $ODOO_GIT_DEST/docker-compose.yml
+  sed -i 's/$POSTGRES_DB/'$POSTGRES_DB'/g' $ODOO_GIT_DEST/docker-compose.yml
 fi
 
 # Set file and directory permissions after installation
-find $DESTINATION -type f -exec chmod 644 {} \;
-find $DESTINATION -type d -exec chmod 755 {} \;
+find $ODOO_GIT_DEST -type f -exec chmod 644 {} \;
+find $ODOO_GIT_DEST -type d -exec chmod 755 {} \;
 
 # Run Odoo
-docker-compose -f $DESTINATION/docker-compose.yml up -d
+if ! is_present="$(type -p "docker-compose")" || [[ -z $is_present ]]; then
+  docker compose -f $ODOO_GIT_DEST/docker-compose.yml up -d
+else
+  docker-compose -f $ODOO_GIT_DEST/docker-compose.yml up -d
+fi
 
-echo "Odoo started at http://localhost:$PORT | Master Password: minhng.info | Live chat port: $CHAT"
+echo "Odoo started at http://localhost:$ODOO_PORT | Master Password: minhng.info | Live chat port: $ODOO_CHAT_PORT"

@@ -4,9 +4,9 @@ services:
     image: postgres:17
     user: root
     environment:
-      - POSTGRES_USER=odoo
-      - POSTGRES_PASSWORD=odoo18@2024
-      - POSTGRES_DB=postgres
+      - POSTGRES_USER=$POSTGRES_USER
+      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+      - POSTGRES_DB=$POSTGRES_DB
     restart: always             # run as a service
     volumes:
         - ./postgresql:/var/lib/postgresql/data
@@ -17,14 +17,14 @@ services:
     depends_on:
       - db
     ports:
-      - "10018:8069"
-      - "20018:8072" # live chat
+      - "$ODOO_PORT:8069"
+      - "$ODOO_CHAT_PORT:8072" # live chat
     tty: true
     command: --
     environment:
       - HOST=db
-      - USER=odoo
-      - PASSWORD=odoo18@2024
+      - USER=$POSTGRES_USER
+      - PASSWORD=$POSTGRES_PASSWORD
     volumes:
       #- /etc/timezone:/etc/timezone:ro
       #- /etc/localtime:/etc/localtime:ro
