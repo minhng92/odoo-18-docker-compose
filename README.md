@@ -5,12 +5,12 @@
 Install [docker](https://docs.docker.com/get-docker/) and [docker-compose](https://docs.docker.com/compose/install/) yourself, then run the following to set up first Odoo instance @ `localhost:10018` (default master password: `minhng.info`):
 
 ``` bash
-curl -s https://raw.githubusercontent.com/minhng92/odoo-18-docker-compose/master/run.sh | sudo bash -s odoo-one 10018 20018
+curl -s https://raw.githubusercontent.com/minhng92/odoo-18-docker-compose/master/run.sh | bash -s odoo-one 10018 20018
 ```
 and/or run the following to set up another Odoo instance @ `localhost:11018` (default master password: `minhng.info`):
 
 ``` bash
-curl -s https://raw.githubusercontent.com/minhng92/odoo-18-docker-compose/master/run.sh | sudo bash -s odoo-two 11018 21018
+curl -s https://raw.githubusercontent.com/minhng92/odoo-18-docker-compose/master/run.sh | bash -s odoo-two 11018 21018
 ```
 
 Some arguments:
