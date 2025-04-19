@@ -4,9 +4,9 @@ services:
     image: postgres:17
     user: root
     environment:
-      - POSTGRES_USER=odoo
-      - POSTGRES_PASSWORD=odoo18@2024
-      - POSTGRES_DB=postgres
+      - POSTGRES_USER=emf
+      - POSTGRES_PASSWORD=emfforever
+      - POSTGRES_DB=emf1995
     restart: always             # run as a service
     volumes:
         - ./postgresql:/var/lib/postgresql/data
@@ -23,8 +23,8 @@ services:
     command: --
     environment:
       - HOST=db
-      - USER=odoo
-      - PASSWORD=odoo18@2024
+      - USER=emf
+      - PASSWORD=emfforever
       - PIP_BREAK_SYSTEM_PACKAGES=1
     volumes:
       #- /etc/timezone:/etc/timezone:ro
