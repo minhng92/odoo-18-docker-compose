@@ -1,7 +1,7 @@
 services:
   db:
     image: postgres:17
-    user: emf
+    user: root
     environment:
       - POSTGRES_USER=emf
       - POSTGRES_PASSWORD=emfforever
