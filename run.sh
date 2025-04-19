@@ -55,5 +55,5 @@ echo "Making the entrypoint executable"
 chmod +x $DESTINATION/entrypoint.sh || exit -1
 
 # Run Odoo
-"Running the EMF-1995 social app"
+echo "Running the EMF-1995 social app"
 docker compose -f $DESTINATION/docker-compose.yml up -d && echo "Odoo started at http://localhost:$PORT | Master Password: minhng.info | Live chat port: $CHAT"
