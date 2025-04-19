@@ -1,4 +1,25 @@
 services:
+  traefik:
+    image: traefik:v3.0
+    container_name: traefik
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    command:
+      - "--api.dashboard=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
+      - "--certificatesresolvers.myresolver.acme.email=you@example.com"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "./letsencrypt:/letsencrypt"
+    networks:
+      - web
   db:
     image: postgres:17
     user: root
@@ -6,7 +27,7 @@ services:
       - POSTGRES_USER=emf
       - POSTGRES_PASSWORD=emfforever
       - POSTGRES_DB=emf1995
-    restart: always             # run as a service
+    restart: always
     volumes:
         - ./postgresql:/var/lib/postgresql/data
 
@@ -25,11 +46,23 @@ services:
       - USER=root
       - PASSWORD=emfforever
       - PIP_BREAK_SYSTEM_PACKAGES=1
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.odoo.rule=Host(`173.212.238.67`)"
+      - "traefik.http.routers.odoo.entrypoints=websecure"
+      - "traefik.http.routers.odoo.tls.certresolver=myresolver"
+      - "traefik.http.services.odoo.loadbalancer.server.port=10018"
     volumes:
       #- /etc/timezone:/etc/timezone:ro
       #- /etc/localtime:/etc/localtime:ro
       - ./entrypoint.sh:/entrypoint.sh
       - ./addons:/mnt/extra-addons
       - ./etc:/etc/odoo
-    restart: always             # run as a service
+    restart: always    
+    networks:
+      - web
+      - default
+networks:
+  web:
+  default:
     
