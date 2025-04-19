@@ -48,7 +48,8 @@ services:
       - PIP_BREAK_SYSTEM_PACKAGES=1
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.odoo.rule=Host(`173.212.238.67`)"
+      - "traefik.http.routers.odoo.rule=HostRegexp(`{any:.*}`)"
+#      - "traefik.http.routers.odoo.rule=Host(`173.212.238.67`)"
       - "traefik.http.routers.odoo.entrypoints=websecure"
       - "traefik.http.routers.odoo.tls.certresolver=myresolver"
       - "traefik.http.services.odoo.loadbalancer.server.port=10018"
