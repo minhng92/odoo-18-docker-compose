@@ -12,7 +12,7 @@ services:
 
   odoo18:
     image: odoo:18
-    user: emf
+    user: root
     depends_on:
       - db
     ports:
@@ -22,7 +22,7 @@ services:
     command: --
     environment:
       - HOST=db
-      - USER=emf
+      - USER=root
       - PASSWORD=emfforever
       - PIP_BREAK_SYSTEM_PACKAGES=1
     volumes:
