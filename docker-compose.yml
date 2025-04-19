@@ -1,7 +1,7 @@
 services:
   db:
     image: postgres:17
-    user: root
+    user: emf
     environment:
       - POSTGRES_USER=emf
       - POSTGRES_PASSWORD=emfforever
@@ -12,7 +12,7 @@ services:
 
   odoo18:
     image: odoo:18
-    user: root
+    user: emf
     depends_on:
       - db
     ports:
