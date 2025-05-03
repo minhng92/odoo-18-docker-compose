@@ -8,22 +8,27 @@ services:
       - "443:443"
       - "8080:8080"
     command:
-      - "--api.dashboard=true"
       - "--api.insecure=true"
       - "--providers.docker=true"
       - "--providers.docker.network=web"
       - "--providers.docker.exposedbydefault=false"
+      - "--providers.file.filename=/etc/traefik/tls.yml"
+      - "--providers.file.watch=true"
       - "--entrypoints.web.address=:80"
       - "--entrypoints.websecure.address=:443"
       - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
       - "--certificatesresolvers.myresolver.acme.email=you@example.com"
       - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+      - "--entrypoints.websecure.http.tls=true"
+      - "--entrypoints.websecure.http.tls.domains[0].main=emf1995.club"
       - "--log.level=DEBUG"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - "./letsencrypt:/letsencrypt"
     networks:
       - web
+    depends_on:
+      - odoo
   db:
     image: postgres:17
     container_name: db-prod
@@ -35,6 +40,8 @@ services:
     restart: always
     volumes:
         - ./postgresql:/var/lib/postgresql/data
+    networks:
+      - backend
 
   odoo:
     image: odoo:18
@@ -54,9 +61,20 @@ services:
       - PIP_BREAK_SYSTEM_PACKAGES=1
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.odoo-http.rule=Host(`vmi2561932.contaboserver.net`)"
+      - "traefik.docker.network=web"
+
+      # HTTP router -> redirect
+      - "traefik.http.routers.odoo-http.rule=Host(`emf1995.club`)"
       - "traefik.http.routers.odoo-http.entrypoints=web"
-      - "traefik.http.routers.odoo-http.service=odoo"
+      - "traefik.http.routers.odoo-http.middlewares=redirect-to-https"
+
+      # Middleware
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+
+      # HTTPS router
+      - "traefik.http.routers.odoo-https.rule=Host(`emf1995.club`)"
+      - "traefik.http.routers.odoo-https.entrypoints=websecure"
+      - "traefik.http.routers.odoo-https.service=odoo"
       - "traefik.http.services.odoo.loadbalancer.server.port=8069"
     volumes:
       #- /etc/timezone:/etc/timezone:ro
@@ -67,8 +85,7 @@ services:
     restart: always
     networks:
       - web
-      - default
+      - backend
 networks:
   web:
-    external: false
-  default:
+  backend:
