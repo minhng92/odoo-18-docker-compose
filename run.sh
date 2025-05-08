@@ -4,7 +4,7 @@ PORT=$2
 CHAT=$3
 
 # Clone Odoo directory
-echo "Clonning the repository" 
+echo "Cloning the repository"
 git clone --depth=1 https://github.com/andreiboyanov/emf-1995-docker-compose $DESTINATION || exit -1
 rm -rf $DESTINATION/.git || exit -1
 
