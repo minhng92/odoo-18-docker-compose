@@ -1,4 +1,4 @@
-# Installing Odoo 18.0 with one command (Supports multiple Odoo instances on one server).
+# Installing Odoo 18.0 for the emf1995.club community site.
 
 ## Quick Installation
 
