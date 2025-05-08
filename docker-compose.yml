@@ -3,6 +3,7 @@ services:
     image: traefik:v3.0
     container_name: traefik
     restart: always
+    
     ports:
       - "80:80"
       - "443:443"
@@ -64,7 +65,7 @@ services:
       - "traefik.docker.network=web"
 
       # HTTP router -> redirect
-      - "traefik.http.routers.odoo-http.rule=Host(`emf1995.club`)"
+      - "traefik.http.routers.odoo-http.rule=Host(${URL})"
       - "traefik.http.routers.odoo-http.entrypoints=web"
       - "traefik.http.routers.odoo-http.middlewares=redirect-to-https"
 
