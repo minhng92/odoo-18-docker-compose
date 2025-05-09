@@ -3,7 +3,6 @@ services:
     image: traefik:v3.0
     container_name: traefik
     restart: always
-    
     ports:
       - "80:80"
       - "443:443"
@@ -13,8 +12,7 @@ services:
       - "--providers.docker=true"
       - "--providers.docker.network=web"
       - "--providers.docker.exposedbydefault=false"
-      - "--providers.file.filename=/etc/traefik/tls.yml"
-      - "--providers.file.watch=true"
+      - "--providers.docker.watch=true"
       - "--entrypoints.web.address=:80"
       - "--entrypoints.websecure.address=:443"
       - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
@@ -22,12 +20,12 @@ services:
       - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
       - "--entrypoints.websecure.http.tls=true"
       - "--entrypoints.websecure.http.tls.domains[0].main=emf1995.club"
-      - "--log.level=DEBUG"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - "./letsencrypt:/letsencrypt"
     networks:
       - web
+      - backend
     depends_on:
       - odoo
   db:
@@ -65,7 +63,7 @@ services:
       - "traefik.docker.network=web"
 
       # HTTP router -> redirect
-      - "traefik.http.routers.odoo-http.rule=Host(${URL})"
+      - "traefik.http.routers.odoo-http.rule=Host(`emf1995.club`)"
       - "traefik.http.routers.odoo-http.entrypoints=web"
       - "traefik.http.routers.odoo-http.middlewares=redirect-to-https"
 
@@ -85,7 +83,6 @@ services:
       - ./etc:/etc/odoo
     restart: always
     networks:
-      - web
       - backend
 networks:
   web:
