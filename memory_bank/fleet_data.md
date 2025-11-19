@@ -1,0 +1,101 @@
+* T-01
+Placas: 69AP5V
+Marca: KENWORTH
+Año: 2000
+Serie: 3WKAD60X4YF508138
+
+* 02
+Placas: 46AR7M
+Marca: KENWORTH
+Año: 2012
+Serie: 3WKDD40X6CF835456
+
+* T-03
+Placas: 12BH1B
+Marca: KENWORTH
+Año: 2012
+Serie: 3WKDD40X9CF835452
+
+* T06
+Placas: 59AR8M
+Marca: INTERNATIONAL
+Año: 2013
+Serie: 3HSDJAPT0DN175180
+
+* T07
+Placas: 58AR8M
+Marca: INTERNATIONAL
+Año: 2013
+Serie: 3HSDJAPT9DN201209
+
+* T11
+Placas: 68AS2V
+Marca: INTERNATIONAL
+Año: 2014
+Serie: 3HSDJAPT2EN041692
+
+* T12
+Placas: 69AS2V
+Marca: INTERNATIONAL
+Año: 2016
+Serie: 3HSDJAPT3GN280851
+
+* T13
+Placas: 881AS2
+Marca: KENWORTH
+Año:
+Serie:
+
+* T16
+Placas: 11BH1B
+Marca: KENWORTH
+Año: 2005
+Serie: 3WKAD40X85F621770
+
+* T18
+Placas: 50BA1K
+Marca: FREIGHTLINER
+Año: 2018
+Serie:
+
+* T19
+Placas: 51BA1K
+Marca: FREIGHTLINER
+Año: 2018
+Serie: 3AKJGLDR3JSJL1849
+
+* T20
+Placas: 52BA1K
+Marca: FREIGHTLINER
+Año: 2018
+Serie: 3AKJGLDRXJSJL1850
+
+* PLATAFORMA 04
+Placas: 44AR8M
+Marca:
+Año:
+Serie:
+
+* PLATAFORMA 05
+Placas: 43AR8M
+Marca: Dodge
+Año: 1969
+Serie:
+
+* PLATAFORMA 14
+Placas: 750DR5
+Marca:
+Año:
+Serie:
+
+* GRUA 08
+Placas: FF0211A
+Marca: Unknown
+Año: 
+Serie:
+
+* GRUA 22
+Placas: FE4340A
+Marca: INTERNATIONAL
+Año: 1990
+Serie: 1HTSDZ4N0LH293236
