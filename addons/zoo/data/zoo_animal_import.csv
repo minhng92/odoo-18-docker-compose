@@ -1,0 +1,31 @@
+name,description,dob,gender,weight,nickname,is_alive,is_purchased,purchase_price,creature_id/name,cage_id/name
+Simba,Majestic lion with golden mane,2018-05-15,male,190.5,King,True,True,15000.0,Lion,Savanna Habitat
+Nala,Beautiful lioness and pride leader,2019-03-20,female,130.0,Queen,True,True,12000.0,Lion,Savanna Habitat
+Shere Khan,Bengal tiger with striking orange stripes,2017-08-10,male,220.0,Khan,True,True,25000.0,Tiger,Rainforest Pavilion
+Rajah,Playful tiger cub learning to hunt,2022-11-05,female,45.5,Raja,True,False,0.0,Tiger,Rainforest Pavilion
+Dumbo,Gentle giant elephant with big ears,2015-01-12,male,5400.0,Big Ears,True,True,50000.0,Elephant,Safari Plains
+Ellie,Young elephant loves to play in water,2020-06-30,female,2800.0,Ellie,True,False,0.0,Elephant,Safari Plains
+Melman,Tall giraffe with beautiful spots,2016-07-22,male,1200.0,Mel,True,True,18000.0,Giraffe,Savanna Habitat
+Gloria,Graceful giraffe mother,2018-09-15,female,950.0,Glori,True,True,16000.0,Giraffe,Savanna Habitat
+Marty,Striped zebra always energetic,2019-04-08,male,350.0,Stripey,True,True,8000.0,Zebra,Safari Plains
+Zara,Young zebra with perfect stripes,2021-12-20,female,280.0,Z,True,False,0.0,Zebra,Safari Plains
+Skipper,Penguin leader of the colony,2020-02-14,male,5.5,Skip,True,True,3000.0,Penguin,Penguin Cove
+Kowalski,Smart penguin loves fish,2020-02-14,male,5.2,Kowl,True,True,3000.0,Penguin,Penguin Cove
+Private,Young penguin still learning,2021-08-01,male,4.8,Priv,True,False,0.0,Penguin,Penguin Cove
+Rico,Tough penguin protects the group,2020-02-14,male,5.7,Ric,True,True,3000.0,Penguin,Penguin Cove
+Aurora,Beautiful white polar bear female,2016-11-30,female,450.0,Rory,True,True,35000.0,Polar Bear,Polar Pavilion
+Blizzard,Large male polar bear king of arctic,2015-09-18,male,550.0,Bliz,True,True,40000.0,Polar Bear,Arctic Zone
+Flipper,Friendly dolphin loves to jump,2019-05-25,male,180.0,Flip,True,True,20000.0,Dolphin,Aquatic Center
+Echo,Dolphin with beautiful voice,2020-07-12,female,165.0,Echi,True,True,18000.0,Dolphin,Tropical Reef
+Jaws,Impressive great white shark,2014-03-03,male,900.0,Big J,True,True,45000.0,Shark,Aquatic Center
+Marina,Graceful reef shark,2018-10-20,female,220.0,Mari,True,True,15000.0,Shark,Tropical Reef
+Freedom,Majestic bald eagle symbol of liberty,2017-06-04,male,6.5,Free,True,True,5000.0,Eagle,Bird Sanctuary
+Liberty,Female eagle partner of Freedom,2018-04-15,female,5.8,Libby,True,True,4500.0,Eagle,Bird Sanctuary
+Zeus,Powerful golden eagle,2016-01-20,male,7.2,Z-man,True,True,6000.0,Eagle,Bird Sanctuary
+Spirit,Young eagle learning to fly,2022-05-10,male,4.5,Spir,True,False,0.0,Eagle,Mountain Ridge
+Leo,Strong second alpha lion,2019-08-22,male,185.0,Leo,True,True,14000.0,Lion,Savanna Habitat
+Elsa,Brave lioness hunter,2020-10-11,female,125.0,Ice Queen,True,True,11000.0,Lion,Desert Dome
+Tony,Young energetic tiger,2021-03-15,male,95.0,T-Rex,True,False,0.0,Tiger,Rainforest Pavilion
+Shira,Rare beautiful white tiger,2018-12-25,female,140.0,Snow,True,True,30000.0,Tiger,Primate Paradise
+Trunks,Adorable baby elephant,2023-02-28,male,800.0,Trunk,True,False,0.0,Elephant,Safari Plains
+Patches,Cute giraffe calf with unique spots,2023-01-05,female,320.0,Patchy,True,False,0.0,Giraffe,Savanna Habitat

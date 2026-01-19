@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+      <data>
+            <!-- ==================================================== -->
+            <!-- 1. ROOT MENU                                         -->
+            <!-- Description: Top-level icon in the Odoo App Switcher -->
+            <!-- ==================================================== -->
+            <menuitem id="menu_ld_root"
+                      name="L&D"
+                      web_icon="ld_management,static/description/icon.png"
+                      sequence="10"/>
+
+            <!-- ==================================================== -->
+            <!-- 2. LEARNER DASHBOARD (My Learning)                   -->
+            <!-- Audience: All Internal Users (Employees)             -->
+            <!-- Purpose: Self-service area for finding courses and   -->
+            <!--          tracking personal progress.                 -->
+            <!-- ==================================================== -->
+            <menuitem id="menu_ld_my_learning"
+                      name="My Learning"
+                      parent="menu_ld_root"
+                      groups="ld_management.group_ld_user"
+                      sequence="10"/>
+
+            <!-- Action: View Public Course Catalog -->
+            <menuitem id="menu_ld_course_catalog"
+                      name="Course Catalog"
+                      parent="menu_ld_my_learning"
+                      action="action_ld_course_public_list"
+                      sequence="10"/>
+            
+            <!-- Action: View Personal Training Requests -->
+            <menuitem id="menu_ld_my_requests"
+                      name="My Requests"
+                      parent="menu_ld_my_learning"
+                      action="action_ld_my_training_requests"
+                      sequence="20"/>
+
+            <!-- Action: View Confirmed Enrollments (My Classes) -->
+            <menuitem id="menu_ld_my_enrollments"
+                      name="My Enrollments"
+                      parent="menu_ld_my_learning"
+                      action="action_ld_my_enrollments"
+                      sequence="30"/>
+
+            <!-- ==================================================== -->
+            <!-- 3. TEAM MANAGEMENT (Line Manager Dashboard)          -->
+            <!-- Audience: Line Managers & HoDs                       -->
+            <!-- Logic: "Dynamic Visibility"                          -->
+            <!--        We do NOT assign a specific 'Manager Group'   -->
+            <!--        here. Instead, we rely on 'Record Rules'.     -->
+            <!--        - Managers: See their team's requests.        -->
+            <!--        - Regular Users: See an empty list.           -->
+            <!-- ==================================================== -->
+            <menuitem id="menu_ld_team_management"
+                      name="Team Management"
+                      parent="menu_ld_root"
+                      groups="ld_management.group_ld_user"
+                      sequence="20"/>
+
+            <!-- Action: Approve/Reject team requests -->
+            <menuitem id="menu_ld_team_approval"
+                      name="Approval Requests"
+                      parent="menu_ld_team_management"
+                      action="action_ld_team_requests_approval"
+                      sequence="10"/>
+
+            <!-- Action: Monitor team compliance and training history -->
+            <menuitem id="menu_ld_team_status"
+                      name="Team Training Status"
+                      parent="menu_ld_team_management"
+                      action="action_ld_team_enrollment_analysis"
+                      sequence="20"/>
+
+            <!-- ==================================================== -->
+            <!-- 4. OPERATIONS (Back Office)                          -->
+            <!-- Audience: L&D Officers & Managers                    -->
+            <!-- Purpose: Day-to-day training administration.         -->
+            <!-- ==================================================== -->
+            <menuitem id="menu_ld_operation"
+                      name="Training Operations"
+                      parent="menu_ld_root"
+                      groups="ld_management.group_ld_officer"
+                      sequence="30"/>
+
+            <menuitem id="menu_ld_all_requests"
+                      name="All Training Requests"
+                      parent="menu_ld_operation"
+                      action="action_ld_all_training_requests"
+                      sequence="10"/>
+
+            <menuitem id="menu_ld_courses"
+                      name="Courses (Master)"
+                      parent="menu_ld_operation"
+                      action="action_ld_course"
+                      sequence="20"/>
+
+            <menuitem id="menu_ld_sessions"
+                      name="Sessions"
+                      parent="menu_ld_operation"
+                      action="action_ld_session"
+                      sequence="30"/>
+            
+            <menuitem id="menu_ld_enrollments"
+                      name="Enrollments & Results"
+                      parent="menu_ld_operation"
+                      action="action_ld_enrollment"
+                      sequence="40"/>
+
+            <!-- ==================================================== -->
+            <!-- 5. REPORTING                                         -->
+            <!-- Audience: L&D Officers & Managers                    -->
+            <!-- Purpose: Strategic analysis (Cost, Coverage).        -->
+            <!-- ==================================================== -->
+            <menuitem id="menu_ld_reporting"
+                      name="Reporting"
+                      parent="menu_ld_root"
+                      groups="ld_management.group_ld_officer"
+                      sequence="40"/>
+
+            <!-- <menuitem id="menu_ld_report_cost"
+                      name="Cost Analysis"
+                      parent="menu_ld_reporting"
+                      action="action_ld_report_cost_analysis"
+                      sequence="10"/> -->
+            
+            <!-- <menuitem id="menu_ld_report_org"
+                      name="Org Chart Status"
+                      parent="menu_ld_reporting"
+                      action="action_ld_report_org_chart"
+                      sequence="20"/> -->
+
+            <!-- ==================================================== -->
+            <!-- 6. CONFIGURATION                                     -->
+            <!-- Audience: L&D Managers Only                          -->
+            <!-- Purpose: System setup and master data management.    -->
+            <!-- ==================================================== -->
+            <menuitem id="menu_ld_configuration"
+                      name="Configuration"
+                      parent="menu_ld_root"
+                      groups="ld_management.group_ld_manager"
+                      sequence="100"/>
+
+            <menuitem id="menu_ld_course_category"
+                      name="Course Categories"
+                      parent="menu_ld_configuration"
+                      action="action_ld_course_category"
+                      sequence="10"/>
+            
+            <menuitem id="menu_ld_rooms"
+                      name="Training Rooms"
+                      parent="menu_ld_configuration"
+                      action="action_ld_room"
+                      sequence="20"/>
+      </data>
+</odoo>

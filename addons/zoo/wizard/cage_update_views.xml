@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Form View for Cage Update Wizard -->
+    <record id="view_zoo_animal_update_cage" model="ir.ui.view">
+        <field name="name">view.zoo.animal.update.cage</field>
+        <field name="model">zoo.cage.update.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Update Cage">
+                <group>
+                    <group>
+                        <field name="cage_id" options="{'no_create': True}"/>
+                    </group>
+                    <group/>
+                </group>
+                <p class="text-muted">
+                    This will update the cage for all selected animal(s).
+                </p>
+                <footer>
+                    <button string="Update Cage" name="update_cage" type="object" default_focus="1" class="btn-primary"/>
+                    <button string="Cancel" class="btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    
+    <!-- Action for Cage Update Wizard -->
+    <record id="action_zoo_animal_update_cage" model="ir.actions.act_window">
+        <field name="name">Update Cage</field>
+        <field name="res_model">zoo.cage.update.wizard</field>
+        <field name="binding_model_id" ref="model_zoo_animal"/>
+        <field name="binding_view_types">list</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="view_zoo_animal_update_cage"/>
+    </record>
+</odoo>

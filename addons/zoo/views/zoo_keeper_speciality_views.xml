@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <!-- Định nghĩa Form view -->
+        <record id="zoo_keeper_speciality_form_view" model="ir.ui.view">
+            <field name="name">zoo.keeper.speciality.form.view</field>
+            <field name="model">zoo.keeper.speciality</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="name" class="oe_edit_only"/>
+                            <h1><field name="name" placeholder="e.g. Reptile Specialist"/></h1>
+                        </div>
+
+                        <group>
+                            <field name="description" 
+                                   placeholder="Description of this speciality..."
+                                   nolabel="1"/>
+                        </group>
+
+                        <notebook>
+                            <page string="Keepers with this Speciality" name="keepers">
+                                <field name="employee_ids" 
+                                       domain="[('is_zoo_keeper', '=', True)]"
+                                       context="{'default_is_zoo_keeper': True}">
+                                    <list>
+                                        <field name="name"/>
+                                        <field name="work_email"/>
+                                        <field name="mobile_phone"/>
+                                        <field name="department_id"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+
+                    <chatter reload_on_post="True"/>
+                </form>
+            </field>
+        </record>
+
+        <!-- Định nghĩa List view -->
+        <record id="zoo_keeper_speciality_list_view" model="ir.ui.view">
+            <field name="name">zoo.keeper.speciality.list.view</field>
+            <field name="model">zoo.keeper.speciality</field>
+            <field name="arch" type="xml">
+                <list string="Specialities">
+                    <field name="name"/>
+                    <field name="description"/>
+                    <field name="employee_ids" widget="many2many_tags"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Định nghĩa Action -->
+        <record id="action_zoo_keeper_speciality" model="ir.actions.act_window">
+            <field name="name">Specialities</field>
+            <field name="res_model">zoo.keeper.speciality</field>
+            <field name="view_mode">list,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Add a new Speciality
+                </p>
+                <p>
+                    Create keeper specialities like Reptile Care, Mammal Care, etc.
+                </p>
+            </field>
+        </record>
+
+        <!-- Định nghĩa menu item Speciality -->
+        <menuitem id="menu_zoo_keeper_speciality"
+            name="Specialities"
+            action="action_zoo_keeper_speciality"
+            sequence="30"
+            parent="menu_zoo_keepers_management"
+            groups="base.group_user"/>
+
+    </data>
+</odoo>

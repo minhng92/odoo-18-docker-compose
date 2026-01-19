@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- ==================================================== -->
+        <!-- 1. SEARCH VIEW                                       -->
+        <!-- ==================================================== -->
+        <record id="view_ld_session_search" model="ir.ui.view">
+            <field name="name">ld.session.search</field>
+            <field name="model">ld.session</field>
+            <field name="arch" type="xml">
+                <search string="Search Sessions">
+                    <field name="name"/>
+                    <field name="course_id"/>
+                    <field name="instructor_id"/>
+                    <field name="location_id"/>
+                    
+                    <filter string="Confirmed" name="confirmed" domain="[('state', '=', 'confirmed')]"/>
+                    <filter string="Ongoing" name="ongoing" domain="[('state', '=', 'ongoing')]"/>
+                    <filter string="My Sessions (Instructor)" name="my_sessions" domain="[('instructor_user_id', '=', uid)]"/>
+                    <separator/>
+                    <filter string="Archived" name="archived" domain="[('active', '=', False)]"/>
+
+                    <group expand="0" string="Group By">
+                        <filter string="Course" name="group_course" context="{'group_by': 'course_id'}"/>
+                        <filter string="Instructor" name="group_instructor" context="{'group_by': 'instructor_id'}"/>
+                        <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
+                        <filter string="Start Month" name="group_date" context="{'group_by': 'start_datetime:month'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- ==================================================== -->
+        <!-- 2. CALENDAR VIEW (Scheduling)                        -->
+        <!-- ==================================================== -->
+        <record id="view_ld_session_calendar" model="ir.ui.view">
+            <field name="name">ld.session.calendar</field>
+            <field name="model">ld.session</field>
+            <field name="arch" type="xml">
+                <calendar string="Training Calendar" 
+                          date_start="start_datetime" 
+                          date_stop="end_datetime" 
+                          color="course_id" 
+                          mode="month"
+                          quick_create="0"
+                          event_open_popup="true">
+                    <field name="name"/>
+                    <field name="instructor_id"/>
+                    <field name="location_id"/>
+                    <field name="state" filters="1"/>
+                </calendar>
+            </field>
+        </record>
+
+        <!-- ==================================================== -->
+        <!-- 3. KANBAN VIEW (Process Management)                  -->
+        <!-- ==================================================== -->
+        <record id="view_ld_session_kanban" model="ir.ui.view">
+            <field name="name">ld.session.kanban</field>
+            <field name="model">ld.session</field>
+            <field name="arch" type="xml">
+                <kanban default_group_by="state" class="o_kanban_small_column" sample="1">
+                    <field name="state"/>
+                    <field name="name"/>
+                    <field name="course_id"/>
+                    <field name="start_datetime"/>
+                    <field name="seats_available"/>
+                    <field name="max_seats"/>
+                    <field name="instructor_id"/>
+                    
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_global_click">
+                                <div class="o_kanban_record_top">
+                                    <div class="o_kanban_record_headings">
+                                        <strong class="o_kanban_record_title">
+                                            <field name="display_name"/>
+                                        </strong>
+                                        <small class="o_kanban_record_subtitle text-muted">
+                                            <field name="start_datetime" widget="date"/>
+                                        </small>
+                                    </div>
+                                    <div class="o_dropdown_kanban dropdown">
+                                        <!-- Actions dropdown if needed -->
+                                    </div>
+                                </div>
+                                
+                                <div class="o_kanban_record_body mt-1">
+                                    <span class="d-block text-truncate">
+                                        <i class="fa fa-user-md me-1" title="Instructor"/> <field name="instructor_id"/>
+                                    </span>
+                                    
+                                    <!-- Seats Indicator -->
+                                    <div class="d-flex justify-content-between mt-2">
+                                        <span t-attf-class="badge #{record.seats_available.raw_value > 0 ? 'text-bg-success' : 'text-bg-danger'}">
+                                            <i class="fa fa-users me-1"/> 
+                                            <t t-esc="record.max_seats.raw_value - record.seats_available.raw_value"/> / <field name="max_seats"/>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <!-- ==================================================== -->
+        <!-- 4. LIST VIEW                                         -->
+        <!-- ==================================================== -->
+        <record id="view_ld_session_list" model="ir.ui.view">
+            <field name="name">ld.session.list</field>
+            <field name="model">ld.session</field>
+            <field name="arch" type="xml">
+                <list string="Sessions" 
+                      decoration-muted="state == 'cancel'" 
+                      decoration-info="state == 'confirmed'" 
+                      decoration-success="state == 'done'">
+                    <field name="name"/>
+                    <field name="course_id"/>
+                    <field name="instructor_id"/>
+                    <field name="start_datetime"/>
+                    <field name="end_datetime"/>
+                    <field name="duration" widget="float_time" optional="hide"/>
+                    <field name="location_id" optional="show"/>
+                    <field name="enrollment_count" string="Attendees"/>
+                    <field name="seats_available" optional="hide"/>
+                    <field name="state" widget="badge" 
+                           decoration-success="state == 'done'"
+                           decoration-info="state == 'confirmed'"
+                           decoration-warning="state == 'ongoing'"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- ==================================================== -->
+        <!-- 5. FORM VIEW                                         -->
+        <!-- ==================================================== -->
+        <record id="view_ld_session_form" model="ir.ui.view">
+            <field name="name">ld.session.form</field>
+            <field name="model">ld.session</field>
+            <field name="arch" type="xml">
+                <form string="Training Session">
+                    <header>
+                        <!-- Workflow Buttons -->
+                        <button name="action_confirm" 
+                                string="Confirm" 
+                                type="object" 
+                                class="oe_highlight" 
+                                invisible="state != 'draft'"/>
+                        
+                        <button name="action_ongoing" 
+                                string="Start Session" 
+                                type="object" 
+                                class="oe_highlight" 
+                                invisible="state != 'confirmed'"/>
+
+                        <button name="action_done" 
+                                string="Mark Done" 
+                                type="object" 
+                                class="oe_highlight btn-success" 
+                                invisible="state != 'ongoing'"/>
+                                
+                        <button name="action_cancel" 
+                                string="Cancel" 
+                                type="object" 
+                                invisible="state in ['done', 'cancel']"/>
+                                
+                        <button name="action_draft" 
+                                string="Reset to Draft" 
+                                type="object" 
+                                invisible="state == 'draft'" 
+                                groups="ld_management.group_ld_manager"/>
+
+                        <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,ongoing,done"/>
+                    </header>
+                    <sheet>
+                        <!-- Archive Ribbon -->
+                        <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" invisible="active"/>
+
+                        <!-- Smart Stats (Optional but good UX) -->
+                        <div class="oe_button_box" name="button_box">
+                            <button class="oe_stat_button" type="object" icon="fa-users" name="action_view_enrollments">
+                                <field string="Attendees" name="enrollment_count" widget="statinfo"/>
+                            </button>
+                            <!-- Waitlist Warning -->
+                            <button class="oe_stat_button" type="action" icon="fa-clock-o" 
+                                    invisible="waitlist_count == 0">
+                                <div class="o_field_widget o_stat_info text-danger">
+                                    <span class="o_stat_value"><field name="waitlist_count"/></span>
+                                    <span class="o_stat_text">Waitlist</span>
+                                </div>
+                            </button>
+                        </div>
+
+                        <div class="oe_title">
+                            <label for="name"/>
+                            <h1>
+                                <field name="name"/>
+                            </h1>
+                            <h3>
+                                <field name="course_id" placeholder="Select Course..." readonly="state != 'draft'"/>
+                            </h3>
+                        </div>
+
+                        <group>
+                            <group string="Logistics">
+                                <field name="instructor_id"/>
+                                <field name="location_id"/>
+                                <field name="delivery_method"/>
+                                <field name="meeting_url" invisible="delivery_method == 'classroom'"/>
+                            </group>
+                            <group string="Schedule">
+                                <field name="start_datetime"/>
+                                <field name="end_datetime"/>
+                                <field name="duration" widget="float_time"/>
+                                <field name="active" invisible="1"/>
+                            </group>
+                        </group>
+
+                        <group string="Capacity">
+                            <group>
+                                <field name="min_seats"/>
+                                <field name="max_seats"/>
+                            </group>
+                            <group>
+                                <field name="seats_available"/>
+                                <field name="waitlist_count"/>
+                            </group>
+                        </group>
+
+                        <notebook>
+                            <!-- Tab 1: Enrollments -->
+                            <page string="Enrollments" name="enrollments">
+                                <field name="enrollment_ids" readonly="1">
+                                    <list decoration-muted="state == 'cancel'" decoration-warning="state == 'waitlist'">
+                                        <field name="employee_id"/>
+                                        <field name="state"/>
+                                        <field name="is_attended"/>
+                                        <field name="grade"/>
+                                    </list>
+                                </field>
+                            </page>
+
+                            <!-- Tab 2: Evaluation -->
+                            <page string="Evaluation" name="evaluation">
+                                <group>
+                                    <field name="survey_id"/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <!-- ==================================================== -->
+        <!-- 6. ACTION                                            -->
+        <!-- ==================================================== -->
+        <record id="action_ld_session" model="ir.actions.act_window">
+            <field name="name">Training Sessions</field>
+            <field name="res_model">ld.session</field>
+            <field name="view_mode">calendar,kanban,list,form</field>
+            <field name="context">{'search_default_ongoing': 1, 'search_default_confirmed': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Schedule your first training session!
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

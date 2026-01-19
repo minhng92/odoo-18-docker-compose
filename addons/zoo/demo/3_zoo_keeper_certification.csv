@@ -1,0 +1,18 @@
+id,certificate_code,name,employee_id/id,issue_date,expiry_date,description
+cert_sarah_1,CERT-2023-001,Advanced Reptile Handling,keeper_sarah_chen,2023-01-15,2026-01-15,Certified in safe handling of venomous and non-venomous reptiles
+cert_james_1,CERT-2023-002,Big Cat Safety Protocol,keeper_james_rodriguez,2023-02-20,2025-02-20,Certified in safe working practices around large carnivores
+cert_emily_1,CERT-2023-003,Avian Health Management,keeper_emily_watson,2023-03-10,2026-03-10,Certified in bird disease prevention and health monitoring
+cert_michael_1,CERT-2023-004,Primate Enrichment Specialist,keeper_michael_okonkwo,2023-04-05,2026-04-05,Certified in behavioral enrichment for primates
+cert_lisa_1,CERT-2023-005,Aquatic Life Support Systems,keeper_lisa_nguyen,2023-05-12,2026-05-12,Certified in aquarium and aquatic system management
+cert_david_1,CERT-2023-006,Herbivore Nutrition Certificate,keeper_david_patel,2023-06-18,2026-06-18,Certified in specialized diets for herbivorous animals
+cert_anna_1,CERT-2023-007,Nocturnal Species Care,keeper_anna_kowalski,2023-07-22,2026-07-22,Certified in care and management of nocturnal animals
+cert_robert_1,CERT-2023-008,Wildlife First Aid,keeper_robert_smith,2023-08-30,2025-08-30,Certified in emergency first aid for exotic animals
+cert_maria_1,CERT-2023-009,Exotic Bird Training,keeper_maria_santos,2023-09-14,2026-09-14,Certified in positive reinforcement training for exotic birds
+cert_william_1,CERT-2023-010,Large Mammal Husbandry,keeper_william_jones,2023-10-08,2026-10-08,Certified in care and management of large mammals
+cert_sofia_1,CERT-2023-011,Primate Health Monitoring,keeper_sofia_garcia,2023-11-19,2026-11-19,Certified in primate health assessment and monitoring
+cert_thomas_1,CERT-2023-012,Veterinary Assistant Wildlife,keeper_thomas_mueller,2023-12-05,2025-12-05,Certified veterinary assistant for exotic animals
+cert_olivia_1,CERT-2024-001,Animal Nutrition Specialist,keeper_olivia_brown,2024-01-20,2027-01-20,Certified in zoo animal nutrition and diet formulation
+cert_daniel_1,CERT-2024-002,Exotic Species Conservation,keeper_daniel_kim,2024-02-28,2027-02-28,Certified in conservation breeding programs for exotic species
+cert_isabella_1,CERT-2024-003,Wildlife Behavior Analysis,keeper_isabella_rossi,2024-03-15,2027-03-15,Certified in animal behavior observation and analysis
+cert_sarah_2,CERT-2024-004,Exotic Animal Transport,keeper_sarah_chen,2024-04-10,2026-04-10,Certified in safe transport of exotic reptiles
+cert_james_2,CERT-2024-005,Animal CPR and Emergency Response,keeper_james_rodriguez,2024-05-22,2025-05-22,Certified in emergency medical response for zoo animals

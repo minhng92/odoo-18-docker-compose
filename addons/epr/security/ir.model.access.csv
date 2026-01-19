@@ -1,0 +1,41 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_epr_purchase_request_user,ePR Request User,model_epr_purchase_request,epr.group_epr_user,1,1,1,0
+access_epr_purchase_request_line_user,ePR Request Line User,model_epr_purchase_request_line,epr.group_epr_user,1,1,1,0
+access_epr_purchase_request_manager,ePR Request Manager,model_epr_purchase_request,epr.group_epr_manager,1,1,1,0
+access_epr_purchase_request_line_manager,ePR Request Line Manager,model_epr_purchase_request_line,epr.group_epr_manager,1,1,1,0
+access_epr_purchase_request_officer,ePR Request Officer,model_epr_purchase_request,epr.group_epr_purchasing_officer,1,1,1,0
+access_epr_purchase_request_line_officer,ePR Request Line Officer,model_epr_purchase_request_line,epr.group_epr_purchasing_officer,1,1,1,0
+access_epr_purchase_request_admin,ePR Request Admin,model_epr_purchase_request,epr.group_epr_admin,1,1,1,1
+access_epr_purchase_request_line_admin,ePR Request Line Admin,model_epr_purchase_request_line,epr.group_epr_admin,1,1,1,1
+access_epr_rfq_officer,ePR RFQ Officer,model_epr_rfq,epr.group_epr_purchasing_officer,1,1,1,0
+access_epr_rfq_line_officer,ePR RFQ Line Officer,model_epr_rfq_line,epr.group_epr_purchasing_officer,1,1,1,0
+access_epr_rfq_admin,ePR RFQ Admin,model_epr_rfq,epr.group_epr_admin,1,1,1,1
+access_epr_rfq_line_admin,ePR RFQ Line Admin,model_epr_rfq_line,epr.group_epr_admin,1,1,1,1
+access_epr_rfq_manager,ePR RFQ Manager,model_epr_rfq,epr.group_epr_manager,1,1,0,0
+access_epr_rfq_line_manager,ePR RFQ Line Manager,model_epr_rfq_line,epr.group_epr_manager,1,1,0,0
+access_epr_approval_rule_officer,ePR Approval Rule Officer,model_epr_approval_rule,epr.group_epr_purchasing_officer,1,1,1,1
+access_epr_approval_rule_line_officer,ePR Approval Rule Line Officer,model_epr_approval_rule_line,epr.group_epr_purchasing_officer,1,1,1,1
+access_epr_approval_rule_admin,ePR Approval Rule Admin,model_epr_approval_rule,epr.group_epr_admin,1,1,1,1
+access_epr_approval_rule_line_admin,ePR Approval Rule Line Admin,model_epr_approval_rule_line,epr.group_epr_admin,1,1,1,1
+access_epr_approval_rule_manager,ePR Approval Rule Manager,model_epr_approval_rule,epr.group_epr_manager,1,0,0,0
+access_epr_approval_rule_line_manager,ePR Approval Rule Line Manager,model_epr_approval_rule_line,epr.group_epr_manager,1,0,0,0
+access_epr_approval_entry_user,ePR Approval Entry User Read,model_epr_approval_entry,epr.group_epr_user,1,0,0,0
+access_epr_approval_entry_user,ePR Approval Entry User,model_epr_approval_entry,epr.group_epr_user,1,0,0,0
+access_epr_approval_entry_manager,ePR Approval Entry Manager,model_epr_approval_entry,epr.group_epr_manager,1,1,1,0
+access_epr_approval_entry_officer,ePR Approval Entry Officer,model_epr_approval_entry,epr.group_epr_purchasing_officer,1,1,1,0
+access_epr_approval_entry_admin,ePR Approval Entry Admin,model_epr_approval_entry,epr.group_epr_admin,1,1,1,1
+access_epr_reject_wizard_user,ePR Reject Wizard User,model_epr_reject_wizard,epr.group_epr_user,1,0,0,0
+access_epr_reject_wizard_manager,ePR Reject Wizard Manager,model_epr_reject_wizard,epr.group_epr_manager,1,1,1,1
+access_epr_reject_wizard_officer,ePR Reject Wizard Officer,model_epr_reject_wizard,epr.group_epr_purchasing_officer,1,1,1,1
+access_epr_reject_wizard_admin,ePR Reject Wizard Admin,model_epr_reject_wizard,epr.group_epr_admin,1,1,1,1
+access_epr_create_po_wizard_officer,ePR Create PO Wizard Officer,model_epr_create_po_wizard,epr.group_epr_purchasing_officer,1,1,1,1
+access_epr_create_po_wizard_admin,ePR Create PO Wizard Admin,model_epr_create_po_wizard,epr.group_epr_admin,1,1,1,1
+access_epr_create_po_line_wizard_officer,ePR Create PO Line Wizard Officer,model_epr_create_po_line_wizard,epr.group_epr_purchasing_officer,1,1,1,1
+access_epr_create_po_line_wizard_admin,ePR Create PO Line Wizard Admin,model_epr_create_po_line_wizard,epr.group_epr_admin,1,1,1,1
+access_epr_create_rfq_wizard_officer,ePR Create RFQ Wizard Officer,model_epr_create_rfq_wizard,epr.group_epr_purchasing_officer,1,1,1,1
+access_epr_create_rfq_wizard_admin,ePR Create RFQ Wizard Admin,model_epr_create_rfq_wizard,epr.group_epr_admin,1,1,1,1
+access_epr_create_rfq_line_officer,ePR Create RFQ Line Officer,model_epr_create_rfq_line,epr.group_epr_purchasing_officer,1,1,1,1
+access_epr_create_rfq_line_admin,ePR Create RFQ Line Admin,model_epr_create_rfq_line,epr.group_epr_admin,1,1,1,1
+access_epr_reject_rfq_wizard_manager,ePR Reject RFQ Wizard Manager,model_epr_reject_rfq_wizard,epr.group_epr_manager,1,1,1,1
+access_epr_reject_rfq_wizard_officer,ePR Reject RFQ Wizard Officer,model_epr_reject_rfq_wizard,epr.group_epr_purchasing_officer,1,1,1,1
+access_epr_reject_rfq_wizard_admin,ePR Reject RFQ Wizard Admin,model_epr_reject_rfq_wizard,epr.group_epr_admin,1,1,1,1

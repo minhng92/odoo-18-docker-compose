@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <!-- ==========================================================
+             LEARNER (USER) RULES
+             ========================================================== -->
+        <!-- RULE: Learners see only published courses to self-register -->
+        <record id="rule_ld_course_learner_published" model="ir.rule">
+            <field name="name">L&amp;D Course: Learners see published courses</field>
+            <field name="model_id" ref="model_ld_course"/>
+            <field name="domain_force">[('state', '=', 'published')]</field>
+            <field name="groups" eval="[(4, ref('ld_management.group_ld_user'))]"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="0"/>
+            <field name="perm_create" eval="0"/>
+            <field name="perm_unlink" eval="0"/>
+        </record>
+
+        <!-- RULE: Learners can manage their own Training Requests -->
+        <record id="rule_ld_request_learner_own" model="ir.rule">
+            <field name="name">L&amp;D Request: User sees own requests</field>
+            <field name="model_id" ref="model_ld_training_request"/>
+            <field name="domain_force">[('employee_id.user_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('ld_management.group_ld_user'))]"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="0"/>
+        </record>
+
+        <!-- ==========================================================
+             LINE MANAGER RULES (DYNAMIC ACCESS)
+             ========================================================== -->
+        <!-- RULE: Permission for Managers to see and approve team requests -->
+        <record id="rule_ld_request_manager_dynamic" model="ir.rule">
+            <field name="name">L&amp;D Request: Manager sees team requests</field>
+            <field name="model_id" ref="model_ld_training_request"/>
+            <field name="domain_force">['|', 
+                ('employee_id.parent_id.user_id', '=', user.id),
+                ('employee_id.coach_id.user_id', '=', user.id)
+            ]</field>
+            <field name="groups" eval="[(4, ref('ld_management.group_ld_user'))]"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/> <!-- Allow clicking Approval buttons -->
+            <field name="perm_create" eval="0"/>
+            <field name="perm_unlink" eval="0"/>
+        </record>
+
+        <!-- ==========================================================
+             OFFICER & MANAGER RULES (FULL ACCESS)
+             ========================================================== -->
+        <record id="rule_ld_request_officer_all" model="ir.rule">
+            <field name="name">L&amp;D Request: Staff sees all records</field>
+            <field name="model_id" ref="model_ld_training_request"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('ld_management.group_ld_officer'))]"/>
+        </record>
+
+    </data>
+</odoo>

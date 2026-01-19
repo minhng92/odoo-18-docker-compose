@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- 
+        noupdate="1": BẮT BUỘC. 
+        - Nếu để 0, mỗi lần bạn upgrade module, số thứ tự (Next Number) 
+        sẽ bị reset về 1, gây trùng lặp mã phiếu.
+        - Nếu muốn cập nhật lại (ví dụ đổi prefix): Bạn phải vào giao diện Odoo:
+        Settings > Technical > Sequences, tìm mã epr.rfq và sửa trực tiếp trên giao diện.
+    -->
+    <data noupdate="1">
+        
+        <record id="seq_epr_rfq" model="ir.sequence">
+            <field name="name">ePR Request for Quotation</field>
+            <!-- CODE này phải khớp chính xác với hàm next_by_code trong Python -->
+            <field name="code">epr.rfq</field>
+            
+            <!-- Định dạng: RFQ/2024/00001 -->
+            <field name="prefix">RFQ/%(year)s/</field>
+            
+            <!-- Padding: Độ dài phần số. Nên để 5 (đến 99,999) để dùng lâu dài -->
+            <field name="padding">5</field>
+            
+            <!-- Cấu hình bước nhảy -->
+            <field name="number_next">1</field>
+            <field name="number_increment">1</field>
+            
+            <!-- 
+                company_id = False: Sequence này dùng chung cho toàn hệ thống.
+                Nếu bạn muốn mỗi công ty có chuỗi số riêng (VD: Cty A số 1, Cty B số 1),
+                bạn cần để trường này, nhưng thường cấu hình mặc định là False để tránh lỗi không tìm thấy.
+            -->
+            <field name="company_id" eval="False"/>
+            
+            <!-- implementation: 'standard' (nhanh hơn) hoặc 'no_gap' (chậm hơn nhưng không mất số) -->
+            <field name="implementation">standard</field>
+        </record>
+
+    </data>
+</odoo>

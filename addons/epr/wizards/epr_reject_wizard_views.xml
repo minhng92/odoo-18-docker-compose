@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- 
+            ===================================================================
+            VIEW DEFINITION
+            Mô tả giao diện Form của Wizard (Popup)
+            ===================================================================
+        -->
+        <record id="view_epr_reject_wizard_form" model="ir.ui.view">
+            <field name="name">epr.reject.wizard.form</field>
+            <field name="model">epr.reject.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Reject Purchase Request">
+                    <!-- 
+                        UX Improvement:
+                        Hiển thị cảnh báo màu vàng để nhắc nhở Line Manager 
+                        rằng họ sắp thực hiện hành động từ chối.
+                    -->
+                    <div class="alert alert-warning" role="alert">
+                        <div class="d-flex">
+                            <div class="me-2">
+                                <i class="fa fa-exclamation-triangle fa-2x"/>
+                            </div>
+                            <div>
+                                <strong>Attention:</strong> You are about to reject this request.<br/>
+                                Please provide a clear reason so the requester can understand and correct it.
+                            </div>
+                        </div>
+                    </div>
+
+                    <group>
+                        <!-- 
+                            Invisible Field:
+                            Trường này ẩn đi nhưng cần thiết để giữ ID của bản ghi gốc.
+                            Dữ liệu được điền tự động bởi hàm default_get trong Python.
+                        -->
+                        <field name="request_id" invisible="1"/>
+                        
+                        <!-- 
+                            Reason Field:
+                            Nơi nhập lý do. Sử dụng widget="text" không bắt buộc nếu 
+                            field Python đã là Text, nhưng giữ lại để tường minh.
+                        -->
+                        <field name="reason" 
+                               widget="text" 
+                               placeholder="e.g., Budget exceeded / Item not standard / Quantity too high..."
+                               required="1"/> <!-- Bắt buộc nhập ở mức giao diện -->
+                    </group>
+
+                    <!-- 
+                        Footer:
+                        Khu vực chứa các nút hành động của Wizard.
+                    -->
+                    <footer>
+                        <!-- 
+                            Confirm Button:
+                            Gọi hàm action_confirm_reject trong model epr.reject.wizard.
+                            Class btn-danger (màu đỏ) để nhấn mạnh hành động phủ quyết.
+                        -->
+                        <button string="Confirm Reject" 
+                                name="action_confirm_reject" 
+                                type="object" 
+                                class="btn-danger"
+                                data-hotkey="q"/>
+                        
+                        <!-- 
+                            Cancel Button:
+                            special="cancel" giúp đóng popup mà không làm gì cả.
+                        -->
+                        <button string="Cancel" 
+                                class="btn-secondary" 
+                                special="cancel"
+                                data-hotkey="z"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!-- 
+            ===================================================================
+            ACTION DEFINITION
+            Định nghĩa hành động để mở Wizard này.
+            Action này sẽ được gọi từ nút "Reject" trên form epr.purchase.request
+            ===================================================================
+        -->
+        <record id="action_epr_reject_wizard" model="ir.actions.act_window">
+            <field name="name">Reject Purchase Request</field>
+            <field name="res_model">epr.reject.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_epr_reject_wizard_form"/>
+            <field name="target">new</field> <!-- Quan trọng: 'new' để mở dạng Popup -->
+        </record>
+
+    </data>
+</odoo>

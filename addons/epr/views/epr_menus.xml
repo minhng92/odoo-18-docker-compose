@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- 
+            ===================================================================
+            TOP LEVEL MENU
+            Menu cấp cao nhất, hiển thị trên thanh ứng dụng chính (App Switcher)
+            ===================================================================
+        -->
+        <menuitem
+            id="menu_epr_root"
+            name="eProcurement"
+            sequence="10"
+            web_icon="epr,static/description/icon.png"/> 
+
+        <!-- 
+            ===================================================================
+            CATEGORY MENU
+            Menu cấp 2, dùng để gom nhóm các chức năng (Requests, Configuration...)
+            ===================================================================
+        -->
+        <menuitem
+            id="menu_epr_purchase_request_category"
+            name="Purchase Requests"
+            parent="menu_epr_root"
+            sequence="10"/>
+
+        <menuitem
+            id="menu_epr_rfq_category"
+            name="RFQs"
+            parent="menu_epr_root"
+            sequence="20"/>
+
+        <menuitem
+            id="menu_epr_po_category"
+            name="POs"
+            parent="menu_epr_root"
+            sequence="30"/>
+
+        <!-- 
+            ===================================================================
+            ACTION MENUS
+            Menu cấp 3, bấm vào sẽ mở ra view (Action)
+            ===================================================================
+        -->
+        
+        <!-- Menu: My Requests (Action đã định nghĩa ở file view) -->
+        <menuitem
+            id="menu_epr_purchase_request_act"
+            name="My Requests"
+            parent="menu_epr_purchase_request_category"
+            action="action_epr_purchase_request"
+            sequence="10"/>
+
+        <!-- Menu To Approve (Dành cho Manager) -->        
+        <menuitem
+            id="menu_epr_request_to_approve"
+            name="To Approve"
+            parent="menu_epr_purchase_request_category"
+            action="action_epr_purchase_request_to_approve"
+            sequence="20"
+            groups="group_epr_manager"/>
+       
+        <!-- Menu: My RFQs (Action đã định nghĩa ở file view) -->
+        <menuitem
+            id="menu_epr_rfq_act"
+            name="My RFQs"
+            parent="menu_epr_rfq_category"
+            action="action_epr_rfq"
+            sequence="10"/>
+
+        <!-- Menu: RFQs Pending Approvals -->
+        <menuitem
+            id="menu_epr_rfq_to_approve"
+            name="Pending Approvals"
+            parent="menu_epr_rfq_category"
+            action="action_epr_my_approvals"
+            sequence="20"
+            groups="epr.group_epr_manager,epr.group_epr_admin"/>
+
+        <!-- Menu: My POs -->
+        <menuitem
+            id="menu_epr_po_act"
+            name="My POs"
+            parent="menu_epr_po_category"
+            action="action_epr_po"
+            sequence="10"
+            groups="epr.group_epr_admin,epr.group_epr_purchasing_officer"/>
+        
+        <!-- 
+            ===================================================================
+            CONFIGURATION MENU
+            ===================================================================
+        -->
+        <menuitem id="menu_epr_config"
+                  name="Configuration"
+                  parent="menu_epr_root"
+                  sequence="100"
+                  groups="epr.group_epr_admin,epr.group_epr_purchasing_officer"/>
+
+        <!-- 
+            1. PRODUCTS MENU
+            Action: purchase.product_normal_action_puchased
+            Lý do: Chỉ hiện sản phẩm có 'Purchase OK' = True.
+            Dependency: Cần module 'purchase' trong manifest.
+        -->
+        <menuitem id="menu_epr_config_products"
+                  name="Products"
+                  parent="menu_epr_config"
+                  action="purchase.product_normal_action_puchased"
+                  sequence="10"
+                  groups="epr.group_epr_admin,epr.group_epr_purchasing_officer"/>
+
+        <!-- 
+            2. VENDORS MENU
+            Action: account.res_partner_action_supplier
+            Lý do: Đây là action chuẩn của Odoo 18 cho Vendors (hiển thị cột nợ phải trả, bills...)
+            Dependency: Cần module 'account' trong manifest.
+        -->
+        <menuitem id="menu_epr_config_vendors"
+                  name="Vendors"
+                  parent="menu_epr_config"
+                  action="account.res_partner_action_supplier"
+                  sequence="20"
+                  groups="epr.group_epr_admin,epr.group_epr_purchasing_officer"/>
+
+        <!-- 
+            3. PRODUCT CATEGORIES
+            Để phân loại sản phẩm tốt hơn
+        -->
+        <menuitem id="menu_epr_config_product_categ"
+                  name="Product Categories"
+                  parent="menu_epr_config"
+                  action="product.product_category_action_form"
+                  sequence="30"
+                  groups="epr.group_epr_admin,epr.group_epr_purchasing_officer"/>
+
+        <!-- 
+            4. APPROVAL RULES
+        -->
+        <menuitem id="menu_epr_config_approval_rules"
+                  name="Approval Rules"
+                  parent="menu_epr_config"
+                  action="action_epr_approval_rule"
+                  sequence="40"
+                  groups="epr.group_epr_admin,epr.group_epr_purchasing_officer"/>
+        
+    </data>
+</odoo>

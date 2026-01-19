@@ -1,0 +1,11 @@
+id,name,email,phone,is_company,supplier_rank
+partner_vendor_1,CÔNG TY TNHH THIẾT BỊ VĂN PHÒNG ABC,contact@abc-office.vn,028 1234 5678,True,1
+partner_vendor_2,CÔNG TY CP CÔNG NGHỆ DELTA,sales@deltatech.vn,024 9876 5432,True,1
+partner_vendor_3,NHÀ PHÂN PHỐI PHẦN MỀM SIGMA,info@sigmasoft.vn,028 5555 6666,True,1
+partner_vendor_4,CÔNG TY VẬT TƯ XÂY DỰNG OMEGA,order@omega-building.vn,028 7777 8888,True,1
+partner_vendor_5,ĐẠI LÝ VĂN PHÒNG PHẨM BETA,sales@beta-stationery.vn,028 2222 3333,True,1
+partner_vendor_6,CÔNG TY TNHH ĐIỆN TỬ GAMMA,contact@gamma-electronics.vn,024 4444 5555,True,1
+partner_vendor_7,NHÀ CUNG CẤP NỘI THẤT EPSILON,info@epsilon-furniture.vn,028 6666 7777,True,1
+partner_vendor_8,CÔNG TY DỊCH VỤ IT ZETA,support@zeta-it.vn,1900 1234,True,1
+partner_vendor_9,ĐẠI LÝ PHÂN PHỐI LAMBDA,order@lambda-dist.vn,028 8888 9999,True,1
+partner_vendor_10,CÔNG TY THƯƠNG MẠI THETA,sales@theta-trading.vn,024 1111 2222,True,1

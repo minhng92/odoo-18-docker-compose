@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- 
+        noupdate="1": Rất quan trọng. 
+        Nó đảm bảo khi bạn nâng cấp (upgrade) module, số thứ tự không bị reset về 1.
+    -->
+    <data noupdate="1">
+        
+        <record id="seq_epr_purchase_request" model="ir.sequence">
+            <field name="name">Purchase Request</field>
+            <!-- CODE này phải khớp tuyệt đối với code trong file Python -->
+            <field name="code">epr.purchase.request</field>
+            
+            <!-- Định dạng tiền tố: PR/2023/ -->
+            <field name="prefix">PR/%(year)s/</field>
+            
+            <!-- Độ dài phần số: 5 số (00001) -->
+            <field name="padding">5</field>
+            
+            <!-- Số bắt đầu -->
+            <field name="number_next">1</field>
+            <field name="number_increment">1</field>
+            
+            <!-- False để dùng chung cho toàn hệ thống, hoặc gán company nếu cần -->
+            <field name="company_id" eval="False"/>
+        </record>
+
+    </data>
+</odoo>

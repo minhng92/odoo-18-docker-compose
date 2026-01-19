@@ -1,0 +1,21 @@
+name,default_code,type,list_price,standard_price,uom_id/id,categ_id/id,description
+Beef (Raw),FOOD001,consu,15.50,12.00,uom.product_uom_kgm,product.product_category_all,Fresh raw beef for carnivores
+Chicken (Raw),FOOD002,consu,8.75,6.50,uom.product_uom_kgm,product.product_category_all,Fresh raw chicken meat
+Fish (Whole),FOOD003,consu,12.00,9.00,uom.product_uom_kgm,product.product_category_all,Fresh whole fish for aquatic animals
+Pork (Raw),FOOD004,consu,10.50,8.00,uom.product_uom_kgm,product.product_category_all,Fresh pork meat
+Deer Meat,FOOD005,consu,18.00,14.00,uom.product_uom_kgm,product.product_category_all,Premium deer meat for large carnivores
+Grass Hay,FOOD006,consu,3.50,2.00,uom.product_uom_kgm,product.product_category_all,Dried grass hay for herbivores
+Alfalfa,FOOD007,consu,4.25,2.50,uom.product_uom_kgm,product.product_category_all,High quality alfalfa
+Fresh Vegetables,FOOD008,consu,5.00,3.50,uom.product_uom_kgm,product.product_category_all,Mixed fresh vegetables
+Fruits (Mixed),FOOD009,consu,6.50,4.50,uom.product_uom_kgm,product.product_category_all,Assorted fresh fruits
+Bamboo,FOOD010,consu,7.00,5.00,uom.product_uom_kgm,product.product_category_all,Fresh bamboo shoots and stalks
+Fish Pellets,FOOD011,consu,4.50,3.00,uom.product_uom_kgm,product.product_category_all,Specialized fish food pellets
+Bird Seed Mix,FOOD012,consu,3.00,2.00,uom.product_uom_kgm,product.product_category_all,Mixed seeds for birds
+Insects (Live),FOOD013,consu,12.50,9.00,uom.product_uom_kgm,product.product_category_all,Live insects for insectivores
+Rabbit (Whole),FOOD014,consu,9.00,7.00,uom.product_uom_kgm,product.product_category_all,Whole rabbit for medium carnivores
+Squid,FOOD015,consu,11.00,8.50,uom.product_uom_kgm,product.product_category_all,Fresh squid for marine animals
+Krill,FOOD016,consu,14.00,11.00,uom.product_uom_kgm,product.product_category_all,Frozen krill for aquatic animals
+Lettuce,FOOD017,consu,2.50,1.50,uom.product_uom_kgm,product.product_category_all,Fresh lettuce leaves
+Carrots,FOOD018,consu,2.00,1.20,uom.product_uom_kgm,product.product_category_all,Fresh carrots
+Sweet Potato,FOOD019,consu,3.00,2.00,uom.product_uom_kgm,product.product_category_all,Fresh sweet potatoes
+Apples,FOOD020,consu,4.00,3.00,uom.product_uom_kgm,product.product_category_all,Fresh apples

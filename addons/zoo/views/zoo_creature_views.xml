@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<odoo>
+    <data>
+        <!-- Định nghĩa From view -->
+        <record id="zoo_creature_form_view" model="ir.ui.view">
+            <field name="name">zoo.creature.form.view</field>
+            <field name="model">zoo.creature</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="name" string="Creature" class="oe_edit_only"/>
+                            <h1><field name="name" placeholder="e.g. Tiger"/></h1>
+                        </div>
+                        
+                        <group name="basic_information">
+                            <group>
+                                <field name="is_rare"/>
+                                <field name="environment"/>
+                            </group>
+                            <group>
+                                <field name="animal_ids"/>
+                            </group>
+                        </group>
+                        
+                        <group string="Feeding Information">
+                            <field name="allowed_product_ids" widget="many2many_tags"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Định nghĩa List view -->
+        <record id="zoo_creature_list_view" model="ir.ui.view">
+            <field name="name">zoo.creature.list.view</field>
+            <field name="model">zoo.creature</field>
+            <field name="arch" type="xml">
+                <list string="Creatures" default_order="create_date desc">
+                    <field name="name"/>
+                    <field name="is_rare"/>
+                    <field name="environment"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Định nghĩa Kanban View -->
+        <record id="zoo_creature_kanban_view" model="ir.ui.view">
+            <field name="name">zoo.creature.kanban.view</field>
+            <field name="model">zoo.creature</field>
+            <field name="arch" type="xml">
+                <kanban default_group_by="environment" records_draggable="false" sample="1">
+                    <field name="id"/>
+                    <field name="name"/>
+                    <field name="is_rare"/>
+                    <field name="environment"/>
+                    <field name="animal_count"/>
+                    
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_global_click oe_kanban_card d-flex flex-column">
+                                
+                                <widget name="web_ribbon" title="Rare" bg_color="bg-danger" invisible="not is_rare"/>
+
+                                <div class="o_kanban_content">
+                                    <div class="o_kanban_record_title fw-bold fs-5 mb-1">
+                                        <field name="name"/>
+                                    </div>
+
+                                    <div class="text-muted">
+                                        <i class="fa fa-globe me-1" title="Environment"/>
+                                        <field name="environment"/>
+                                    </div>
+                                    
+                                    <div class="o_kanban_record_bottom mt-auto pt-2">
+                                        <div class="oe_kanban_bottom_left">
+                                            <span class="badge rounded-pill text-bg-success">
+                                                <i class="fa fa-paw me-1"/> <field name="animal_count"/>
+                                            </span>
+                                        </div>
+                                        <div class="oe_kanban_bottom_right">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+
+        <!-- Định nghĩa Action -->
+        <record id="action_zoo_creature" model="ir.actions.act_window">
+            <field name="name">Creature</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">zoo.creature</field>
+            <field name="view_mode">kanban,list,form</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'list', 'view_id': ref('zoo_creature_list_view')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('zoo_creature_form_view')}),
+                (0, 0, {'view_mode': 'kanban', 'view_id': ref('zoo_creature_kanban_view')})
+                ]"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new Creature Species
+                </p>
+                <p>
+                    Define species like Lion, Shark, or Eagle and assign their environments.
+                </p>
+            </field>
+        </record>
+        
+        <!-- Định nghĩa Menu -->
+        <menuitem id="menu_zoo_configuration"
+            name="Configuration"
+            sequence="100"
+            parent="menu_zoo"
+            groups="base.group_user"/>
+        
+        <menuitem id="menu_zoo_configuration_creature"
+            name="Creature"
+            sequence="10"
+            parent="menu_zoo_configuration"
+            action="action_zoo_creature"
+            groups="base.group_user"/>
+    </data>
+</odoo>

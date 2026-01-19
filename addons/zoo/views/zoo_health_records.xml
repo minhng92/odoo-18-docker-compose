@@ -1,0 +1,113 @@
+<odoo>
+    <data>
+        <!-- Định nghĩa Form view -->
+        <record id="zoo_health_record_form_view" model="ir.ui.view">
+            <field name="name">zoo.health.record.form.view</field>
+            <field name="model">zoo.health.record</field>
+            <field name="arch" type="xml">
+                <form string="Health Record Details">
+                    
+                    <!-- Thanh trạng thái (Statusbar) -->
+                    <header>
+                        <!-- Các nút bấm chuyển đổi trạng thái (Giả định bạn đã code hàm Python) -->
+                        <button name="action_in_progress" string="Start Procedure" type="object" class="oe_highlight" invisible="record_state != 'draft'"/>
+                        <button name="action_completed" string="Procedure Done" type="object" class="oe_highlight" invisible="record_state != 'in_progress'"/>
+                        <button name="action_cancel" string="Cancel Record" type="object" invisible="record_state in ('completed', 'cancelled')"/>
+                        <button name="action_draft" string="Reset to Draft" type="object" invisible="record_state in ('completed', 'in_progress', 'draft')"/>
+
+                        <!-- Trường record_state với widget statusbar -->
+                        <field name="record_state" widget="statusbar" statusbar_visible="draft,in_progress,completed, cancelled"/>
+                    </header>
+
+                    <!-- Thân Form -->
+                    <sheet>
+                        <!-- <div class="oe_button_box" name="button_box"/> -->
+                        <div class="oe_title">
+                            <!-- Trường record_name (Computed Field) -->
+                            <h1><field name="record_name" placeholder="Health Record Name"/></h1>
+                        </div>
+
+                        <group>
+                            <!-- Cột Trái: Các thông tin liên kết và người chịu trách nhiệm -->
+                            <group>
+                                <field name="animal_id"/>
+                                <field name="veterinarian_id"/>
+                                <field name="related_cage_id"/>
+                            </group>
+                            <!-- Cột Phải: Thông tin sự kiện và phân loại -->
+                            <group>
+                                <field name="date_occurrence"/>
+                                <field name="record_type"/>
+                                <field name="is_preventive"/>
+                            </group>
+                        </group>
+
+                        <notebook>
+                            <page string="Diagnosis and Treatment Details" name="diagnosis_treatment">
+                                <!-- Chẩn đoán và Chi tiết Điều trị -->
+                                <group>
+                                    <group>
+                                        <field name="diagnosis" placeholder="Mô tả kết quả chẩn đoán..."/>
+                                    </group>
+                                    <group>
+                                        <!-- Trường điều kiện: next_follow_up_date -->
+                                        <field name="next_follow_up_date" invisible="record_state == 'in_progress'"/>
+                                    </group>
+                                </group>
+
+                                <!-- Trường HTML (treatment_details) -->
+                                <separator string="Chi tiết Thủ tục và Liều lượng Thuốc"/>
+                                <field name="treatment_details" 
+                                    widget="html"
+                                    placeholder="Ghi rõ chi tiết thủ tục, liều lượng, và các biến chứng (nếu có)."
+                                    />
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <!-- <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div> -->
+                </form>
+            </field>
+        </record>
+
+        <!-- Định nghĩa List view -->
+        <record id="zoo_health_record_list_view" model="ir.ui.view">
+            <field name="name">zoo.health.record.list.view</field>
+            <field name="model">zoo.health.record</field>
+            <field name="arch" type="xml">
+                <list string="Health Records" default_order="record_name">
+                    <field name="record_name"/>
+                    <field name="animal_id"/>
+                    <field name="date_occurrence"/>
+                    <field name="record_type"/>
+                    <field name="veterinarian_id"/>
+                    <field name="record_state" decoration-success="record_state == 'completed'"
+                                               decoration-warning="record_state == 'in_progress'"
+                                               decoration-danger="record_state == 'cancelled'"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Định nghĩa Action -->
+        <record id="action_zoo_health_record" model="ir.actions.act_window">
+            <field name="name">Health Records</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">zoo.health.record</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'list', 'view_id': ref('zoo_health_record_list_view')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('zoo_health_record_form_view')})]"/>
+        </record>
+
+        <!-- Định nghĩa Menu -->
+        <menuitem id="menu_zoo_health_record"
+            name="Health Records"
+            action="action_zoo_health_record"
+            sequence="40"
+            parent="menu_zoo"
+            groups="base.group_user"/>
+
+    </data>
+</odoo>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="report_animal_document">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <div class="oe_structure"/>
+                    
+                    <!-- Header with Animal Name -->
+                    <div class="row mb-4">
+                        <div class="col-12 text-center">
+                            <h2 class="mt-3">
+                                <strong>Animal Report</strong>
+                            </h2>
+                            <h3 class="text-primary">
+                                <span t-field="o.name"/>
+                            </h3>
+                        </div>
+                    </div>
+
+                    <!-- Main Content: Avatar + Info -->
+                    <div class="row mt-4">
+                        <!-- Left Column: Avatar -->
+                        <div class="col-6" style="text-align: right;">
+                            <t t-if="o.image">
+                                <img t-att-src="image_data_uri(o.image)" 
+                                     style="max-height: 150px; max-width: 100%; border: 1px solid #ccc; padding: 2px;"/>
+                            </t>
+                            <t t-else="">
+                                <span class="text-muted fst-italic">No Image Available</span>
+                            </t>
+                        </div>
+                        
+                        <!-- Right Column: Information -->
+                        <div class="col-6">
+                            <div class="border rounded p-3 bg-light">
+                                <h5 class="mb-3">
+                                    <i class="fa fa-info-circle"/> Basic Information
+                                </h5>
+                                <table class="table table-sm table-borderless">
+                                    <tr>
+                                        <td style="width: 30%;"><strong>Species:</strong></td>
+                                        <td><span t-field="o.creature_id"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Gender:</strong></td>
+                                        <td><span t-field="o.gender"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Age:</strong></td>
+                                        <td><span t-field="o.age"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Cage/Enclosure:</strong></td>
+                                        <td><span t-field="o.cage_id"/></td>
+                                    </tr>
+                                    <tr t-if="o.dob">
+                                        <td><strong>Date of Birth:</strong></td>
+                                        <td><span t-field="o.dob" t-options="{'widget': 'date'}"/></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="oe_structure"/>
+                </div>
+            </t>
+        </template>
+
+        <template id="report_animal_template">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-set="lang" t-value="o.create_uid.lang"/>
+                    <t t-call="zoo.report_animal_document" t-lang="lang"/>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

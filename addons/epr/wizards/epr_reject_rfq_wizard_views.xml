@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <record id="view_epr_reject_rfq_wizard_form" model="ir.ui.view">
+            <field name="name">epr.reject.rfq.wizard.form</field>
+            <field name="model">epr.reject.rfq.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Reject RFQ">
+                    <sheet>
+                        <group>
+                            <div class="d-flex align-items-center">
+                                <div class="me-2">
+                                    <i class="fa fa-exclamation-triangle fa-2x"/>
+                                </div>
+                                <div class="alert alert-warning" role="alert">
+                                    <strong>Attention:</strong> You are about to reject this Request for Quotation. 
+                                    This action will set the RFQ to Rejected and notify the creator.
+                                </div>
+                            </div>
+                        </group>
+                        <group>
+                            <field name="reason"
+                                   widget="text"
+                                   placeholder="e.g. Price too high, Vendor not qualified, Specification mismatch..."
+                                   required="1"/>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button string="Confirm Reject" 
+                                name="action_confirm_reject" 
+                                type="object" 
+                                class="btn-danger" 
+                                data-hotkey="q"/>
+                        <button string="Cancel" 
+                                class="btn-secondary" 
+                                special="cancel" 
+                                data-hotkey="z"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_epr_reject_rfq_wizard" model="ir.actions.act_window">
+            <field name="name">Reject RFQ</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">epr.reject.rfq.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_epr_reject_rfq_wizard_form"/>
+            <field name="target">new</field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="action_report_zoo_animal" model="ir.actions.report">
+            <field name="name">Zoo Animals (PDF)</field>
+            <field name="model">zoo.animal</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">zoo.report_animal_template</field>
+            <field name="report_file">zoo.report_animal_template</field>
+            <field name="print_report_name">'Animal - %s' % (object.name)</field>
+            
+            <field name="binding_model_id" ref="model_zoo_animal"/>
+            <field name="binding_type">report</field>
+        </record>
+    </data>
+</odoo>

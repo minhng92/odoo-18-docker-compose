@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<odoo>
+    <data noupdate="1">
+
+        <!-- RULE 1: User chỉ thấy Request của chính mình -->
+        <record
+            id="rule_epr_user_own_documents"
+            model="ir.rule">
+            <field name="name">ePR: User sees own requests</field>
+            <field
+                name="model_id"
+                ref="model_epr_purchase_request"/>
+            <field name="domain_force">[('employee_id.user_id','=',user.id)]</field>
+            <field
+                name="groups"
+                eval="[(4, ref('epr.group_epr_user'))]"/>
+        </record>
+
+        <!-- RULE 2: Manager thấy Request của mình VÀ Request cần mình duyệt -->
+        <!-- Logic: Thấy của mình HOẶC (Mình nằm trong danh sách approver_ids) HOẶC (Mình là manager của phòng ban đó) -->
+        <record id="rule_epr_manager_approver" model="ir.rule">
+            <field name="name">ePR: Manager sees department requests</field>
+            <field name="model_id" ref="model_epr_purchase_request"/>
+            <field name="domain_force">['|', '|', '|',
+                ('employee_id.user_id','=',user.id), 
+                ('approver_ids', 'in', user.id),
+                ('department_id.manager_id.user_id', '=', user.id),
+                ('employee_id.parent_id.user_id', '=', user.id)
+            ]</field>
+            <field name="groups" eval="[(4, ref('epr.group_epr_manager'))]"/>
+        </record>
+
+        <!-- RULE 3: Purchasing Officer thấy Request của mình VÀ Request đã được DUYỆT -->
+        <!-- Purchasing Officer không cần thấy các bản nháp (Draft) của người khác -->
+        <record
+            id="rule_epr_officer_all_approved"
+            model="ir.rule">
+            <field name="name">ePR: Officer sees approved requests</field>
+            <field
+                name="model_id"
+                ref="model_epr_purchase_request"/>
+            <field name="domain_force">['|', 
+                ('employee_id.user_id','=',user.id), 
+                ('state', 'in', ['approved', 'in_progress', 'done'])
+            ]</field>
+            <field
+                name="groups"
+                eval="[(4, ref('epr.group_epr_purchasing_officer'))]"/>
+        </record>
+
+        <!-- RULE 4: Administrator thấy TẤT CẢ -->
+        <record
+            id="rule_epr_admin_all"
+            model="ir.rule">
+            <field name="name">ePR: Admin sees all</field>
+            <field
+                name="model_id"
+                ref="model_epr_purchase_request"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field
+                name="groups"
+                eval="[(4, ref('epr.group_epr_admin'))]"/>
+        </record>
+
+    </data>
+</odoo>

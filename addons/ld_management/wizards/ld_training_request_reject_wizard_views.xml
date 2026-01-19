@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <!-- FORM VIEW -->
+        <record id="view_ld_training_request_reject_wizard_form" model="ir.ui.view">
+            <field name="name">ld.training.request.reject.wizard.form</field>
+            <field name="model">ld.training.request.reject.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Reject Training Request">
+                    <sheet>
+                        <group>
+                            <div class="alert alert-warning" role="alert">
+                                <strong>Warning:</strong> You are about to reject this training request. 
+                                This action is final and the employee will be notified.
+                            </div>
+                        </group>
+                        <group>
+                            <field name="reason" placeholder="e.g. Budget constraints, Not relevant to current role, Schedule conflict..."/>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button string="Confirm Reject" 
+                                name="action_confirm_reject" 
+                                type="object" 
+                                class="btn-danger" 
+                                data-hotkey="q"/>
+                        <button string="Cancel" 
+                                class="btn-secondary" 
+                                special="cancel" 
+                                data-hotkey="z"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!-- ACTION (Required to be referenced if needed directly) -->
+        <record id="action_ld_training_request_reject_wizard" model="ir.actions.act_window">
+            <field name="name">Reject Request</field>
+            <field name="res_model">ld.training.request.reject.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="view_id" ref="view_ld_training_request_reject_wizard_form"/>
+        </record>
+
+    </data>
+</odoo>

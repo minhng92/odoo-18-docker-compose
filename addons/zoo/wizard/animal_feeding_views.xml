@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="view_zoo_animal_feeding_wizard_form" model="ir.ui.view">
+            <field name="name">zoo.animal.feeding.wizard.form</field>
+            <field name="model">zoo.animal.feeding.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Bulk Feeding">
+                    <sheet>
+                        <div class="alert alert-info text-center" role="alert" invisible="not creature_id">
+                            Feeding <field name="creature_id" readonly="1" class="fw-bold"/>
+                        </div>
+
+                        <group>
+                            <group>
+                                <field name="meal_date"/>
+                                <field name="staff_id" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="animal_ids" widget="many2many_tags_avatar" readonly="1"/>
+                            </group>
+                        </group>
+
+                        <separator string="Menu Selection"/>
+                        
+                        <field name="allowed_product_ids" invisible="1"/>
+
+                        <field name="line_ids">
+                            <list editable="bottom">
+                                <field name="product_id" 
+                                    domain="[('id', 'in', parent.allowed_product_ids)]"
+                                    options="{'no_create': True, 'no_open': True}"/>
+                                    
+                                <field name="qty_per_animal"/>
+                                <field name="uom_id"/>
+                            </list>
+                        </field>
+                    </sheet>
+                    <footer>
+                        <button name="action_confirm" string="Confirm &amp; Create Batches" 
+                                type="object" class="btn-primary" data-hotkey="q"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel" data-hotkey="z"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_zoo_animal_feeding_wizard" model="ir.actions.act_window">
+            <field name="name">Feed Animals</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">zoo.animal.feeding.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field> <field name="binding_model_id" ref="model_zoo_animal"/> <field name="binding_view_types">list</field> </record>
+    </data>
+</odoo>

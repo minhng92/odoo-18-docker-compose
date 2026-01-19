@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="product_price" xml:space="preserve">
+    <t t-inherit="point_of_sale.OrderReceipt" t-inherit-mode="extension">
+        <xpath expr="//span[@t-out='order.currencyDisplayPriceIncl']" position="attributes">
+            <attribute name="style">font-family: "Aptos";
+                font-weight: 600;
+                font-size: 120%;
+                color: #6711d6ff;</attribute>
+        </xpath>
+    </t>
+
+    <t t-inherit="point_of_sale.OrderWidget" t-inherit-mode="extension">
+        <xpath expr="//span[@class='total']" position="attributes">
+            <attribute name="style">font-weight: bold;
+            text-decoration: underline;
+            color: #7618f1ff;</attribute>
+        </xpath>
+    </t>
+
+</templates>

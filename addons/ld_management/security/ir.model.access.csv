@@ -1,0 +1,13 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_ld_training_request_user,ld.training.request.user,model_ld_training_request,ld_management.group_ld_user,1,1,1,0
+access_ld_training_request_officer,ld.training.request.officer,model_ld_training_request,ld_management.group_ld_officer,1,1,1,1
+access_ld_training_request_manager,ld.training.request.manager,model_ld_training_request,ld_management.group_ld_manager,1,1,1,1
+access_ld_training_request_reject_wizard,ld.training.request.reject.wizard.user,model_ld_training_request_reject_wizard,ld_management.group_ld_user,1,1,1,1
+access_ld_course_category_user,ld.course.category.user,model_ld_course_category,ld_management.group_ld_user,1,0,0,0
+access_ld_course_category_manager,ld.course.category.manager,model_ld_course_category,ld_management.group_ld_manager,1,1,1,1
+access_ld_course_user,ld.course.user,model_ld_course,ld_management.group_ld_user,1,0,0,0
+access_ld_course_manager,ld.course.manager,model_ld_course,ld_management.group_ld_manager,1,1,1,1
+access_ld_course_skill_manager,ld.course.skill.manager,model_ld_course_skill,ld_management.group_ld_manager,1,1,1,1
+access_ld_enrollment_user,ld.enrollment.user,model_ld_enrollment,ld_management.group_ld_user,1,0,0,0
+access_ld_enrollment_officer,ld.enrollment.officer,model_ld_enrollment,ld_management.group_ld_officer,1,1,1,1
+access_ld_enrollment_attendance_officer,ld.enrollment.attendance.officer,model_ld_enrollment_attendance,ld_management.group_ld_officer,1,1,1,1

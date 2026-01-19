@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- ==========================================================
+             1. MODULE CATEGORY
+             Defines the section in "Settings > Users"
+             ========================================================== -->
+        <record model="ir.module.category" id="module_category_ld_management">
+            <field name="name">Learning &amp; Development</field>
+            <field name="description">Manage internal training, skill development, and certifications.</field>
+            <field name="sequence">20</field>
+        </record>
+
+        <!-- ==========================================================
+             2. GROUP: LEARNER (USER)
+             - Base level access.
+             - Every employee belongs to this group by default.
+             - Can view Public Courses and their own Requests.
+             ========================================================== -->
+        <record id="group_ld_user" model="res.groups">
+            <field name="name">User (Learner)</field>
+            <field name="category_id" ref="module_category_ld_management"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+            <field name="comment">Basic access for employees to request training and view their own history.</field>
+        </record>
+
+        <!-- ==========================================================
+             3. GROUP: OFFICER
+             - Operational level access.
+             - Can manage Course Catalog, Sessions, Attendance.
+             - Inherits Learner rights.
+             ========================================================== -->
+        <record id="group_ld_officer" model="res.groups">
+            <field name="name">Officer</field>
+            <field name="category_id" ref="module_category_ld_management"/>
+            <field name="implied_ids" eval="[(4, ref('group_ld_user'))]"/>
+            <field name="comment">Operational access for L&amp;D specialists (Scheduling, Attendance, etc.).</field>
+        </record>
+
+        <!-- ==========================================================
+             4. GROUP: MANAGER
+             - Strategic level access.
+             - Can configure Master Data (Skills, Categories) and view Reporting.
+             - Inherits Officer rights.
+             ========================================================== -->
+        <record id="group_ld_manager" model="res.groups">
+            <field name="name">Manager</field>
+            <field name="category_id" ref="module_category_ld_management"/>
+            <field name="implied_ids" eval="[(4, ref('group_ld_officer')), (4, ref('hr.group_hr_user'))]"/>
+            <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+            <field name="comment">Full access for L&amp;D Managers including Configuration and Reporting.</field>
+        </record>
+
+        <!-- ==========================================================
+             5. AUTOMATIC ASSIGNMENT
+             - Automatically assigns 'Learner' group to any new Internal User.
+             ========================================================== -->
+        <record id="base.group_user" model="res.groups">
+            <field name="implied_ids" eval="[(4, ref('ld_management.group_ld_user'))]"/>
+        </record>
+
+    </data>
+</odoo>

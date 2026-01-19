@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<odoo>
+    <data>
+        <!-- 1. Tạo Category cho Module ePR -->
+        <record
+            model="ir.module.category"
+            id="module_category_epr">
+            <field
+                name="name">Purchase Request (ePR)</field>
+            <field name="description">Quản lý phân quyền cho yêu cầu mua sắm điện tử.</field>
+            <field name="sequence">15</field>
+        </record>
+
+        <!-- 2. Group: Standard User (Requester) -->
+        <!-- Đây là nhóm cơ bản nhất, ai cũng có thể thuộc nhóm này -->
+        <record
+            id="group_epr_user"
+            model="res.groups">
+            <field name="name">User (Requester)</field>
+            <field
+                name="category_id"
+                ref="module_category_epr"/>
+            <field
+                name="implied_ids"
+                eval="[(4, ref('base.group_user'))]"/>
+            <field name="comment">Nhân viên tạo yêu cầu mua sắm.</field>
+        </record>
+
+        <!-- 3. Group: Management (Approver) -->
+        <!-- Nhóm này kế thừa quyền của User (có thể tự tạo request) -->
+        <record
+            id="group_epr_manager"
+            model="res.groups">
+            <field name="name">Manager (Approver)</field>
+            <field
+                name="category_id"
+                ref="module_category_epr"/>
+            <field
+                name="implied_ids"
+                eval="[(4, ref('group_epr_user'))]"/>
+            <field name="comment">Trưởng bộ phận/Ban giám đốc phê duyệt yêu cầu.</field>
+        </record>
+
+        <!-- 4. Group: Purchasing Officer -->
+        <!-- Nhóm này chuyên biệt cho phòng mua hàng. Kế thừa User để tạo request nội bộ -->
+        <record
+            id="group_epr_purchasing_officer"
+            model="res.groups">
+            <field name="name">Purchasing Officer</field>
+            <field
+                name="category_id"
+                ref="module_category_epr"/>
+            <field
+                name="implied_ids"
+                eval="[(4, ref('group_epr_user'))]"/>
+            <field name="comment">Nhân viên thu mua xử lý các yêu cầu đã duyệt.</field>
+        </record>
+
+        <!-- 5. Group: Administrator -->
+        <!-- Kế thừa tất cả các nhóm trên để có toàn quyền -->
+        <record
+            id="group_epr_admin"
+            model="res.groups">
+            <field name="name">Administrator</field>
+            <field
+                name="category_id"
+                ref="module_category_epr"/>
+            <field
+                name="implied_ids"
+                eval="[(4, ref('group_epr_manager')), (4, ref('group_epr_purchasing_officer'))]"/>
+            <field
+                name="users"
+                eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+        </record>
+
+        <!-- === QUAN TRỌNG: TỰ ĐỘNG GÁN QUYỀN REQUESTER CHO ALL USERS === -->
+        <!-- 
+             Logic: Can thiệp vào nhóm gốc 'base.group_user' (Internal User)
+             và bảo nó rằng: "Bất kỳ ai là Internal User thì mặc định cũng là ePR User".
+        -->
+        <record id="base.group_user" model="res.groups">
+            <field name="implied_ids" eval="[(4, ref('epr.group_epr_user'))]"/>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,220 @@
+<odoo>
+
+    <!-- ============================================================ -->
+    <!-- 1. APPROVAL RULES (CONFIGURATION)                            -->
+    <!-- ============================================================ -->
+
+    <!-- List View cho Rule Header -->
+    <record id="view_epr_approval_rule_list" model="ir.ui.view">
+        <field name="name">epr.approval.rule.list</field>
+        <field name="model">epr.approval.rule</field>
+        <field name="arch" type="xml">
+            <list string="Approval Rules" decoration-muted="not active">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="department_id" optional="show"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View cho Rule Header + Lines -->
+    <record id="view_epr_approval_rule_form" model="ir.ui.view">
+        <field name="name">epr.approval.rule.form</field>
+        <field name="model">epr.approval.rule</field>
+        <field name="arch" type="xml">
+            <form string="Approval Rule">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <!-- Smart buttons nếu cần -->
+                    </div>
+                    <widget name="web_ribbon" title="Archived" bg_color="bg-danger" invisible="active"/>
+                    
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h1>
+                            <field name="name" placeholder="e.g. Standard PR Approval (> $5000)"/>
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group>
+                            <field name="department_id" placeholder="Leave empty for all departments"/>
+                        </group>
+                        <group>
+                            <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Approval Steps" name="steps">
+                            <field name="line_ids" nolabel="1">
+                                <list editable="bottom" default_order="sequence, id">
+                                    <field name="sequence"/>
+                                    <field name="name" placeholder="e.g. Manager Approval"/>
+                                    
+                                    <field name="min_amount"/>
+                                    <field name="currency_id" column_invisible="True"/>
+                                    
+                                    <field name="user_ids" widget="many2many_tags_avatar" options="{'no_create': True}"/>
+                                    
+                                    <field name="approval_type"/>
+                                </list>
+                            </field>
+                            <p class="text-muted mt-2">
+                                * Rules are processed in order. The first rule matching the criteria (Department, Amount) will be used.
+                            </p>
+                        </page>
+                    </notebook>
+                </sheet>
+                <!-- Chatter cho audit log -->
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View cho Rule -->
+    <record id="view_epr_approval_rule_search" model="ir.ui.view">
+        <field name="name">epr.approval.rule.search</field>
+        <field name="model">epr.approval.rule</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="department_id"/>
+                <filter string="Archived" name="archived" domain="[('active', '=', False)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Department" name="group_department" context="{'group_by': 'department_id'}"/>
+                    <filter string="Company" name="group_company" context="{'group_by': 'company_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ============================================================ -->
+    <!-- 2. APPROVAL ENTRIES (AUDIT / MONITORING)                     -->
+    <!-- ============================================================ -->
+    
+    <!-- View này dành cho Menu "Pending Approvals" hoặc "All Approvals" -->
+    
+    <record id="view_epr_approval_entry_list" model="ir.ui.view">
+        <field name="name">epr.approval.entry.list</field>
+        <field name="model">epr.approval.entry</field>
+        <field name="arch" type="xml">
+            <list string="Approval Requests" create="0" edit="0" decoration-success="status == 'approved'" decoration-danger="status == 'refused'" decoration-info="status == 'new'">
+                <field name="create_date" string="Date"/>
+                <field name="rfq_id" string="Document"/>
+                <field name="name" string="Step"/>
+                <field name="required_user_ids" widget="many2many_tags_avatar"/>
+                <field name="status" widget="badge" 
+                       decoration-info="status == 'new'" 
+                       decoration-success="status == 'approved'"
+                       decoration-danger="status == 'refused'"
+                       decoration-muted="status == 'pending'"/>
+                <field name="actual_user_id"/>
+                <field name="approval_date"/>
+                <field name="rejection_reason" optional="show"/>
+                <button name="action_approve_line" string="Approve" type="object" 
+                        icon="fa-check text-success" 
+                        invisible="not can_approve"/>
+                <button name="action_reject_line" string="Refuse" type="object" 
+                        icon="fa-times text-danger" 
+                        invisible="not can_approve"/>
+                <field name="can_approve" column_invisible="True"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View cho Approval Entry (Manager dùng để duyệt) -->
+    <record id="view_epr_approval_entry_form" model="ir.ui.view">
+        <field name="name">epr.approval.entry.form</field>
+        <field name="model">epr.approval.entry</field>
+        <field name="arch" type="xml">
+            <form string="Approval Request" create="0">
+                <header>
+                    <button name="action_approve_line" string="Approve" type="object" 
+                            class="oe_highlight" invisible="not can_approve" 
+                            confirm="Are you sure you want to approve this request?"/>
+                    <button name="action_reject_line" string="Refuse" type="object" 
+                            invisible="not can_approve"/>
+                    <field name="status" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only" string="Step Name"/>
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="Document Info">
+                            <field name="rfq_id" readonly="1" options="{'no_open': False}"/>
+                            <!-- TRƯỜNG BẠN CẦN: Hiển thị tổng tiền -->
+                            <field name="amount_total" widget="monetary" string="RFQ Total Amount"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                        <group string="Approval Details">
+                            <field name="create_date" string="Requested Date" readonly="1"/>
+                            <field name="actual_user_id" invisible="status != 'approved'"/>
+                            <field name="approval_date" invisible="status != 'approved'"/>
+                            <field name="can_approve" invisible="1"/>
+                        </group>
+                    </group>
+                    <group string="Approvers List">
+                        <field name="required_user_ids" widget="many2many_tags_avatar" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View cho Approval Entry -->
+    <record id="view_epr_approval_entry_search" model="ir.ui.view">
+        <field name="name">epr.approval.entry.search</field>
+        <field name="model">epr.approval.entry</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="rfq_id"/>
+                <field name="required_user_ids"/>
+                <filter string="My Approvals" name="my_approvals" 
+                        domain="[('status','=','new'), ('required_user_ids', 'in', uid)]"/>
+                <filter string="To Approve" name="to_approve" domain="[('status', '=', 'new')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Status" name="group_status" context="{'group_by': 'status'}"/>
+                    <filter string="Document" name="group_rfq" context="{'group_by': 'rfq_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ============================================================ -->
+    <!-- 3. ACTIONS & MENUS                                           -->
+    <!-- ============================================================ -->
+
+    <!-- Action: Approval Rules (Configuration) -->
+    <record id="action_epr_approval_rule" model="ir.actions.act_window">
+        <field name="name">Approval Rules</field>
+        <field name="res_model">epr.approval.rule</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+            Create a new Approval Rule
+          </p><p>
+            Define rules to automatically trigger approval workflows based on amount and department.
+          </p>
+        </field>
+    </record>
+
+    <!-- Action: My Approvals (Dashboard) -->
+    <record id="action_epr_my_approvals" model="ir.actions.act_window">
+        <field name="name">My Approvals</field>
+        <field name="res_model">epr.approval.entry</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_my_approvals': 1}</field>
+        <field name="domain">[('status', 'in', ['new', 'pending'])]</field>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+            No pending approvals found
+          </p>
+        </field>
+    </record>
+
+</odoo>

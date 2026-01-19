@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- ==================================================== -->
+        <!-- 1. SEARCH VIEW                                       -->
+        <!-- ==================================================== -->
+        <record id="view_ld_enrollment_search" model="ir.ui.view">
+            <field name="name">ld.enrollment.search</field>
+            <field name="model">ld.enrollment</field>
+            <field name="arch" type="xml">
+                <search string="Search Enrollments">
+                    <field name="name"/>
+                    <field name="employee_id"/>
+                    <field name="session_id"/>
+                    <field name="course_id"/>
+                    
+                    <!-- Filters -->
+                    <filter string="My Enrollments" name="my_enrollments" domain="[('employee_id.user_id', '=', uid)]"/>
+                    <separator/>
+                    <filter string="Waitlisted" name="waitlist" domain="[('state', '=', 'waitlist')]"/>
+                    <filter string="Confirmed" name="confirmed" domain="[('state', '=', 'confirmed')]"/>
+                    <filter string="Attended" name="attended" domain="[('state', '=', 'attended')]"/>
+                    <separator/>
+                    <filter string="Passed" name="passed" domain="[('state', '=', 'passed')]"/>
+                    <filter string="Failed" name="failed" domain="[('state', '=', 'failed')]"/>
+                    <separator/>
+                    <filter string="Archived" name="archived" domain="[('active', '=', False)]"/>
+
+                    <!-- Group By -->
+                    <group expand="0" string="Group By">
+                        <filter string="Course" name="group_course" context="{'group_by': 'course_id'}"/>
+                        <filter string="Session" name="group_session" context="{'group_by': 'session_id'}"/>
+                        <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
+                        <filter string="Grade" name="group_grade" context="{'group_by': 'grade'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- ==================================================== -->
+        <!-- 2. LIST VIEW (Management)                            -->
+        <!-- ==================================================== -->
+        <record id="view_ld_enrollment_list" model="ir.ui.view">
+            <field name="name">ld.enrollment.list</field>
+            <field name="model">ld.enrollment</field>
+            <field name="arch" type="xml">
+                <list string="Enrollments" 
+                      decoration-warning="state == 'waitlist'"
+                      decoration-info="state == 'confirmed'"
+                      decoration-success="state == 'passed'"
+                      decoration-danger="state == 'failed'"
+                      decoration-muted="state == 'cancel'">
+                    
+                    <field name="name" decoration-bf="1"/>
+                    <field name="employee_id" widget="many2one_avatar_user"/>
+                    <field name="session_id"/>
+                    <field name="course_id" optional="hide"/>
+                    
+                    <!-- Attendance Stats -->
+                    <field name="attended_sessions_count" optional="show" string="Attendance"/>
+                    <field name="is_attended" widget="boolean_toggle" optional="hide"/>
+                    
+                    <!-- Assessment -->
+                    <field name="score" optional="show"/>
+                    <field name="grade" widget="badge" 
+                           decoration-success="grade == 'pass'" 
+                           decoration-danger="grade == 'fail'"/>
+                    
+                    <field name="state" widget="badge" 
+                           decoration-info="state == 'confirmed'"
+                           decoration-success="state == 'passed'"
+                           decoration-warning="state == 'waitlist'"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- ==================================================== -->
+        <!-- 3. PIVOT VIEW (Reporting)                            -->
+        <!-- ==================================================== -->
+        <record id="view_ld_enrollment_pivot" model="ir.ui.view">
+            <field name="name">ld.enrollment.pivot</field>
+            <field name="model">ld.enrollment</field>
+            <field name="arch" type="xml">
+                <pivot string="Enrollment Analysis" sample="1">
+                    <field name="course_id" type="row"/>
+                    <field name="session_id" type="row"/>
+                    <field name="state" type="col"/>
+                    <field name="score" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+        <!-- ==================================================== -->
+        <!-- 4. FORM VIEW                                         -->
+        <!-- ==================================================== -->
+        <record id="view_ld_enrollment_form" model="ir.ui.view">
+            <field name="name">ld.enrollment.form</field>
+            <field name="model">ld.enrollment</field>
+            <field name="arch" type="xml">
+                <form string="Enrollment">
+                    <header>
+                        <!-- Workflow Buttons -->
+                        <button name="action_confirm" 
+                                string="Confirm Seat" 
+                                type="object" 
+                                class="oe_highlight" 
+                                invisible="state != 'draft'"/>
+                        
+                        <button name="action_attended" 
+                                string="Mark Attended" 
+                                type="object" 
+                                class="oe_highlight" 
+                                invisible="state != 'confirmed'"/>
+                        
+                        <!-- Grading Buttons (Visible after attended) -->
+                        <button name="action_pass" 
+                                string="Pass" 
+                                type="object" 
+                                class="btn-success" 
+                                invisible="state != 'attended'"
+                                confirm="Are you sure you want to pass this student?"/>
+                                
+                        <button name="action_fail" 
+                                string="Fail" 
+                                type="object" 
+                                class="btn-danger" 
+                                invisible="state != 'attended'"
+                                confirm="Are you sure you want to mark this student as failed?"/>
+
+                        <button name="action_cancel" 
+                                string="Cancel" 
+                                type="object" 
+                                invisible="state in ['passed', 'failed', 'cancel']"/>
+
+                        <field name="state" widget="statusbar" statusbar_visible="confirmed,attended,passed"/>
+                    </header>
+                    <sheet>
+                        <widget name="web_ribbon" title="Passed" bg_color="text-bg-success" invisible="state != 'passed'"/>
+                        <widget name="web_ribbon" title="Failed" bg_color="text-bg-danger" invisible="state != 'failed'"/>
+                        <widget name="web_ribbon" title="Waitlist" bg_color="text-bg-warning" invisible="state != 'waitlist'"/>
+
+                        <div class="oe_title">
+                            <label for="name"/>
+                            <h1><field name="name"/></h1>
+                        </div>
+
+                        <group>
+                            <group string="Student Info">
+                                <field name="employee_id"/>
+                                <field name="request_id" readonly="1"/>
+                            </group>
+                            <group string="Session Info">
+                                <field name="session_id"/>
+                                <field name="course_id"/>
+                                <field name="active" invisible="1"/>
+                            </group>
+                        </group>
+
+                        <notebook>
+                            <!-- Tab 1: Attendance -->
+                            <page string="Attendance" name="attendance">
+                                <group>
+                                    <group>
+                                        <field name="is_attended"/>
+                                        <field name="attended_sessions_count"/>
+                                    </group>
+                                </group>
+                                <field name="attendance_ids">
+                                    <list editable="bottom">
+                                        <field name="date"/>
+                                        <field name="state"/>
+                                        <field name="remarks"/>
+                                    </list>
+                                </field>
+                            </page>
+
+                            <!-- Tab 2: Assessment -->
+                            <page string="Assessment &amp; Result" name="assessment">
+                                <group>
+                                    <group string="Scoring">
+                                        <field name="score"/>
+                                        <field name="score_max"/>
+                                        <field name="grade" widget="radio"/>
+                                    </group>
+                                    <group string="Certification">
+                                        <field name="completion_date"/>
+                                        <field name="has_badge" widget="boolean_toggle"/>
+                                        <field name="certificate_url" widget="url"/>
+                                        <field name="survey_input_id"/>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <!-- ==================================================== -->
+        <!-- 5. ACTIONS                                           -->
+        <!-- ==================================================== -->
+        
+        <!-- Action 1: General Enrollment Management (Officer) -->
+        <record id="action_ld_enrollment" model="ir.actions.act_window">
+            <field name="name">Enrollments</field>
+            <field name="res_model">ld.enrollment</field>
+            <field name="view_mode">list,pivot,form</field>
+            <field name="context">{'search_default_group_session': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No enrollments found.
+                </p>
+            </field>
+        </record>
+
+        <!-- Action 2: My Enrollments (Learner) -->
+        <record id="action_ld_my_enrollments" model="ir.actions.act_window">
+            <field name="name">My Enrollments</field>
+            <field name="res_model">ld.enrollment</field>
+            <field name="view_mode">list,form</field>
+            <field name="domain">[('employee_id.user_id', '=', uid)]</field>
+            <field name="context">{'create': False, 'edit': False}</field> <!-- Read-only for learners -->
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    You haven't enrolled in any courses yet.
+                </p>
+            </field>
+        </record>
+
+        <!-- Action 3: Team Analysis (Manager) -->
+        <record id="action_ld_team_enrollment_analysis" model="ir.actions.act_window">
+            <field name="name">Team Training Analysis</field>
+            <field name="res_model">ld.enrollment</field>
+            <field name="view_mode">pivot,list</field>
+            <!-- Domain handled by Record Rules automatically (Manager sees own team) -->
+            <field name="context">{'search_default_group_course': 1}</field>
+        </record>
+
+    </data>
+</odoo>

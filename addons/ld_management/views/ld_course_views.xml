@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- ==================================================== -->
+        <!-- 1. SEARCH VIEW                                       -->
+        <!-- ==================================================== -->
+        <record id="view_ld_course_search" model="ir.ui.view">
+            <field name="name">ld.course.search</field>
+            <field name="model">ld.course</field>
+            <field name="arch" type="xml">
+                <search string="Search Courses">
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="category_id"/>
+                    <field name="description" string="Content"/>
+                    
+                    <filter string="My Courses" name="my_courses" domain="[('user_id', '=', uid)]"/>
+                    <filter string="Published" name="published" domain="[('state', '=', 'published')]"/>
+                    <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
+                    <separator/>
+                    <filter string="Archived" name="archived" domain="[('active', '=', False)]"/>
+
+                    <group expand="0" string="Group By">
+                        <filter string="Category" name="group_category" context="{'group_by': 'category_id'}"/>
+                        <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
+                        <filter string="Delivery Method" name="group_method" context="{'group_by': 'delivery_method'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- ==================================================== -->
+        <!-- 2. KANBAN VIEW (CATALOG STYLE)                       -->
+        <!-- ==================================================== -->
+        <record id="view_ld_course_kanban" model="ir.ui.view">
+            <field name="name">ld.course.kanban</field>
+            <field name="model">ld.course</field>
+            <field name="arch" type="xml">
+                <kanban class="o_kanban_mobile" sample="1">
+                    <field name="id"/>
+                    <field name="name"/>
+                    <field name="image_128"/> <!-- Provided by image.mixin -->
+                    <field name="state"/>
+                    <field name="category_id"/>
+                    <field name="duration"/>
+                    <field name="delivery_method"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_global_click o_kanban_record_has_image_fill">
+                                <!-- Course Image -->
+                                <t t-if="record.image_128.raw_value">
+                                    <div class="o_kanban_image_fill_left d-none d-md-block"
+                                         t-attf-style="background-image:url('#{kanban_image('ld.course', 'image_128', record.id.raw_value)}')"/>
+                                </t>
+                                <t t-else="">
+                                    <div class="o_kanban_image_fill_left d-none d-md-block o_kanban_image_full" 
+                                         t-attf-style="background-color: #f0f0f0"/>
+                                </t>
+
+                                <div class="oe_kanban_details">
+                                    <div class="o_kanban_record_top">
+                                        <div class="o_kanban_record_headings">
+                                            <strong class="o_kanban_record_title">
+                                                <field name="name"/>
+                                            </strong>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Tags & Info -->
+                                    <div class="o_kanban_tags_section">
+                                        <span class="badge rounded-pill text-bg-info">
+                                            <field name="category_id"/>
+                                        </span>
+                                    </div>
+                                    
+                                    <div class="mt-2">
+                                        <ul>
+                                            <li><i class="fa fa-clock-o me-1" title="Duration"/> <field name="duration"/> hours</li>
+                                            <li><i class="fa fa-desktop me-1" title="Method"/> <field name="delivery_method"/></li>
+                                        </ul>
+                                    </div>
+
+                                    <div class="o_kanban_record_bottom">
+                                        <div class="oe_kanban_bottom_left">
+                                            <field name="state" widget="label_selection" 
+                                                   options="{'classes': {'draft': 'default', 'published': 'success'}}"/>
+                                        </div>
+                                        <div class="oe_kanban_bottom_right">
+                                            <field name="user_id" widget="many2one_avatar_user"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <!-- ==================================================== -->
+        <!-- 3. LIST VIEW                                         -->
+        <!-- ==================================================== -->
+        <record id="view_ld_course_list" model="ir.ui.view">
+            <field name="name">ld.course.list</field>
+            <field name="model">ld.course</field>
+            <field name="arch" type="xml">
+                <list string="Courses">
+                    <field name="code"/>
+                    <field name="name"/>
+                    <field name="category_id"/>
+                    <field name="duration" widget="float_time"/>
+                    <field name="delivery_method"/>
+                    <field name="user_id" widget="many2one_avatar_user" optional="hide"/>
+                    <field name="state" widget="badge" 
+                           decoration-success="state == 'published'" 
+                           decoration-muted="state == 'draft'"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- ==================================================== -->
+        <!-- 4. FORM VIEW                                         -->
+        <!-- ==================================================== -->
+        <record id="view_ld_course_form" model="ir.ui.view">
+            <field name="name">ld.course.form</field>
+            <field name="model">ld.course</field>
+            <field name="arch" type="xml">
+                <form string="Course">
+                    <header>
+                        <button name="action_publish" string="Publish" type="object" class="oe_highlight" invisible="state != 'draft'"/>
+                        <button name="action_draft" string="Set to Draft" type="object" invisible="state != 'published'"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,published"/>
+                    </header>
+                    <sheet>
+                        <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" invisible="active"/>
+                        
+                        <!-- Image Upload (Top Right) -->
+                        <field name="image_1920" widget="image" class="oe_avatar" options="{'preview_image': 'image_128'}"/>
+                        
+                        <div class="oe_title">
+                            <label for="name"/>
+                            <h1>
+                                <field name="name" placeholder="Course Title..."/>
+                            </h1>
+                            <h3>
+                                <field name="code" placeholder="Code (e.g. SOFT-001)"/>
+                            </h3>
+                        </div>
+
+                        <group>
+                            <group>
+                                <field name="category_id"/>
+                                <field name="delivery_method"/>
+                                <field name="duration" widget="float_time"/>
+                            </group>
+                            <group>
+                                <field name="user_id"/>
+                                <field name="active" invisible="1"/>
+                            </group>
+                        </group>
+
+                        <notebook>
+                            <!-- Tab 1: Description -->
+                            <page string="Description" name="description">
+                                <field name="description" placeholder="Course Syllabus, Objectives, and Agenda..."/>
+                            </page>
+
+                            <!-- Tab 2: Skills Outcome -->
+                            <page string="Skills Outcome" name="skills">
+                                <field name="skill_outcome_ids">
+                                    <list editable="bottom">
+                                        <field name="skill_type_id"/>
+                                        <field name="skill_id"/>
+                                        <field name="skill_level_id"/>
+                                    </list>
+                                </field>
+                            </page>
+
+                            <!-- Tab 3: Requirements -->
+                            <page string="Prerequisites" name="prereqs">
+                                <field name="prerequisite_ids" widget="many2many_tags"/>
+                                <group string="SEO Info">
+                                    <field name="description_short"/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <!-- ==================================================== -->
+        <!-- 5. ACTIONS                                           -->
+        <!-- ==================================================== -->
+        
+        <!-- Action: All Courses (Management) -->
+        <record id="action_ld_course" model="ir.actions.act_window">
+            <field name="name">Courses</field>
+            <field name="res_model">ld.course</field>
+            <field name="view_mode">kanban,list,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first course!
+                </p>
+            </field>
+        </record>
+
+        <!-- Action: Public Catalog (For Learners) - Default to Kanban, Published only -->
+        <record id="action_ld_course_public_list" model="ir.actions.act_window">
+            <field name="name">Course Catalog</field>
+            <field name="res_model">ld.course</field>
+            <field name="view_mode">kanban,form</field>
+            <field name="domain">[('state', '=', 'published')]</field>
+            <field name="context">{'search_default_group_category': 1, 'create': False, 'edit': False}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No courses available at the moment.
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

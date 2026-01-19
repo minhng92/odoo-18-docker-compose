@@ -1,0 +1,11 @@
+id,name,description
+speciality_reptile,Reptile Care Specialist,Expertise in caring for snakeslizardsturtles and other reptiles
+speciality_mammal,Mammal Care Specialist,Expertise in caring for large and small mammals
+speciality_bird,Avian Care Specialist,Expertise in caring for birds and aviaries
+speciality_aquatic,Aquatic Animal Specialist,Expertise in caring for fishamphibians and marine life
+speciality_primate,Primate Behavior Specialist,Expertise in primate care and behavioral enrichment
+speciality_carnivore,Large Carnivore Specialist,Expertise in caring for big catsbears and other carnivores
+speciality_herbivore,Herbivore Nutrition Specialist,Expertise in herbivore diet planning and nutrition
+speciality_nocturnal,Nocturnal Animal Specialist,Expertise in caring for nocturnal species
+speciality_exotic,Exotic Species Specialist,Expertise in rare and exotic animal care
+speciality_veterinary,Veterinary Assistant,Expertise in animal health monitoring and medical support

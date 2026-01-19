@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <!-- Định nghĩa Form view -->
+        <record id="zoo_keeper_certification_form_view" model="ir.ui.view">
+            <field name="name">zoo.keeper.certification.form.view</field>
+            <field name="model">zoo.keeper.certification</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <field name="is_expired" invisible="1"/>
+                        <button string="Expired" class="oe_read_only btn-danger" 
+                                invisible="not is_expired" 
+                                icon="fa-exclamation-triangle"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="name" class="oe_edit_only"/>
+                            <h1><field name="name" placeholder="e.g. Wildlife Safety Certification"/></h1>
+                        </div>
+
+                        <group>
+                            <group>
+                                <field name="certificate_code" placeholder="e.g. CERT-2024-001"/>
+                                <field name="employee_id" 
+                                       domain="[('is_zoo_keeper', '=', True)]"
+                                       context="{'default_is_zoo_keeper': True}"/>
+                            </group>
+                            <group>
+                                <field name="issue_date"/>
+                                <field name="expiry_date"/>
+                            </group>
+                        </group>
+
+                        <group>
+                            <field name="description" placeholder="Additional certification details..."/>
+                        </group>
+
+                        <group>
+                            <field name="attachment" 
+                                   widget="binary" 
+                                   filename="name"
+                                   string="Upload Certificate Document"/>
+                        </group>
+                    </sheet>
+                    
+                    <chatter reload_on_post="True"/>
+                    
+                </form>
+            </field>
+        </record>
+
+        <!-- Định nghĩa List view -->
+        <record id="zoo_keeper_certification_list_view" model="ir.ui.view">
+            <field name="name">zoo.keeper.certification.list.view</field>
+            <field name="model">zoo.keeper.certification</field>
+            <field name="arch" type="xml">
+                <list string="Certifications" default_order="expiry_date asc">
+                    <field name="certificate_code"/>
+                    <field name="name"/>
+                    <field name="employee_id"/>
+                    <field name="issue_date"/>
+                    <field name="expiry_date"/>
+                    <field name="is_expired" 
+                           widget="boolean_toggle" 
+                           decoration-danger="is_expired == True"
+                           readonly="1"/>
+                    <field name="attachment" widget="binary" filename="name"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Định nghĩa Action -->
+        <record id="action_zoo_keeper_certification" model="ir.actions.act_window">
+            <field name="name">Certifications</field>
+            <field name="res_model">zoo.keeper.certification</field>
+            <field name="view_mode">list,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Add a new Certification
+                </p>
+                <p>
+                    Track keeper certifications, issue and expiry dates.
+                </p>
+            </field>
+        </record>
+
+        <!-- Định nghĩa menu item Certification -->
+        <menuitem id="menu_zoo_keeper_certification"
+            name="Certifications"
+            action="action_zoo_keeper_certification"
+            sequence="20"
+            parent="menu_zoo_keepers_management"
+            groups="base.group_user"/>
+
+    </data>
+</odoo>

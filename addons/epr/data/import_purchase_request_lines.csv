@@ -1,0 +1,21 @@
+id,request_id/id,name,product_description,quantity,estimated_price,uom_name,suggested_vendor_name
+pr_line_1,pr_demo_1,Máy in HP LaserJet Pro M404dn,Máy in laser đen trắng - in 2 mặt tự động - kết nối mạng LAN,2,8500000,Cái,CÔNG TY TNHH THIẾT BỊ VĂN PHÒNG ABC
+pr_line_2,pr_demo_2,Laptop Dell Latitude 5540,Laptop văn phòng - Intel Core i5 - RAM 16GB - SSD 512GB,5,25000000,Bộ,CÔNG TY CP CÔNG NGHỆ DELTA
+pr_line_3,pr_demo_3,Bàn làm việc 1m4,Bàn làm việc chữ L - kích thước 1m4 x 0.6m - màu gỗ sồi,10,3500000,Cái,NHÀ CUNG CẤP NỘI THẤT EPSILON
+pr_line_4,pr_demo_4,Ghế công thái học Ergohuman,Ghế văn phòng cao cấp - hỗ trợ lưng - tay vịn điều chỉnh,5,12000000,Cái,NHÀ CUNG CẤP NỘI THẤT EPSILON
+pr_line_5,pr_demo_5,Máy chiếu Epson EB-X51,Máy chiếu 3800 lumens - độ phân giải XGA - kết nối HDMI,2,15000000,Cái,CÔNG TY TNHH ĐIỆN TỬ GAMMA
+pr_line_6,pr_demo_6,Microsoft 365 Business Premium (1 năm),Bản quyền phần mềm Office 365 - bao gồm Teams - OneDrive 1TB,50,3000000,License,NHÀ PHÂN PHỐI PHẦN MỀM SIGMA
+pr_line_7,pr_demo_7,Ổ cứng SSD Samsung 870 EVO 1TB,Ổ cứng SSD SATA 2.5 inch - tốc độ đọc 560MB/s,10,2500000,Cái,CÔNG TY CP CÔNG NGHỆ DELTA
+pr_line_8,pr_demo_8,Dịch vụ bảo trì Server (6 tháng),Gói bảo trì hệ thống server - bao gồm backup và monitoring 24/7,1,50000000,Gói,CÔNG TY DỊCH VỤ IT ZETA
+pr_line_9,pr_demo_9,Router Wifi TP-Link Archer AX73,Router Wifi 6 - băng tần kép - tốc độ 5400Mbps,5,3200000,Cái,CÔNG TY TNHH ĐIỆN TỬ GAMMA
+pr_line_10,pr_demo_10,Webcam Logitech C920 HD Pro,Webcam Full HD 1080p - tự động lấy nét - micro kép,10,2800000,Cái,CÔNG TY TNHH ĐIỆN TỬ GAMMA
+pr_line_11,pr_demo_11,Giấy A4 Double A 80gsm,Giấy in A4 chất lượng cao - độ trắng 96%,100,85000,Ream,ĐẠI LÝ VĂN PHÒNG PHẨM BETA
+pr_line_12,pr_demo_12,Bút bi Thiên Long TL-027,Bút bi mực xanh - nét thanh đẹp,200,5000,Cây,ĐẠI LÝ VĂN PHÒNG PHẨM BETA
+pr_line_13,pr_demo_13,Kẹp giấy loại lớn,Kẹp giấy kim loại 51mm - hộp 12 cái,50,25000,Hộp,ĐẠI LÝ VĂN PHÒNG PHẨM BETA
+pr_line_14,pr_demo_14,Sổ tay bìa cứng A5,Sổ tay bìa da cao cấp - 200 trang giấy kẻ ngang,30,65000,Quyển,ĐẠI LÝ VĂN PHÒNG PHẨM BETA
+pr_line_15,pr_demo_15,Mực in HP 76A Black,Hộp mực chính hãng cho máy in HP LaserJet Pro M404,10,2200000,Hộp,CÔNG TY TNHH THIẾT BỊ VĂN PHÒNG ABC
+pr_line_16,pr_demo_16,Điều hòa Daikin Inverter 1HP,Điều hòa tiết kiệm điện - công suất 9000BTU,3,12000000,Bộ,CÔNG TY TNHH ĐIỆN TỬ GAMMA
+pr_line_17,pr_demo_17,Bình nước nóng Ariston 30L,Bình nước nóng điện - dung tích 30 lít - có chống giật,2,4500000,Cái,CÔNG TY VẬT TƯ XÂY DỰNG OMEGA
+pr_line_18,pr_demo_18,Camera IP Hikvision DS-2CD1047G2,Camera IP 4MP - hồng ngoại 30m - chuẩn IP67,8,1800000,Cái,CÔNG TY TNHH ĐIỆN TỬ GAMMA
+pr_line_19,pr_demo_19,Tủ hồ sơ sắt 3 ngăn,Tủ hồ sơ kim loại - có khóa - kích thước 1.2m x 0.5m x 0.4m,5,2800000,Cái,NHÀ CUNG CẤP NỘI THẤT EPSILON
+pr_line_20,pr_demo_20,Nước uống đóng chai Aquafina 500ml,Nước tinh khiết chai 500ml - thùng 24 chai,50,95000,Thùng,CÔNG TY THƯƠNG MẠI THETA

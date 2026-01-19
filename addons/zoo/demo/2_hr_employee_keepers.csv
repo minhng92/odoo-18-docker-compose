@@ -1,0 +1,16 @@
+id,name,is_zoo_keeper,work_email,mobile_phone,speciality_ids/id
+keeper_sarah_chen,Sarah Chen,TRUE,sarah.chen@zoo.com,+1-555-0101,"speciality_reptile,speciality_exotic"
+keeper_james_rodriguez,James Rodriguez,TRUE,james.rodriguez@zoo.com,+1-555-0102,"speciality_mammal,speciality_carnivore"
+keeper_emily_watson,Emily Watson,TRUE,emily.watson@zoo.com,+1-555-0103,speciality_bird
+keeper_michael_okonkwo,Michael Okonkwo,TRUE,michael.okonkwo@zoo.com,+1-555-0104,"speciality_primate,speciality_veterinary"
+keeper_lisa_nguyen,Lisa Nguyen,TRUE,lisa.nguyen@zoo.com,+1-555-0105,speciality_aquatic
+keeper_david_patel,David Patel,TRUE,david.patel@zoo.com,+1-555-0106,speciality_herbivore
+keeper_anna_kowalski,Anna Kowalski,TRUE,anna.kowalski@zoo.com,+1-555-0107,"speciality_nocturnal,speciality_reptile"
+keeper_robert_smith,Robert Smith,TRUE,robert.smith@zoo.com,+1-555-0108,speciality_carnivore
+keeper_maria_santos,Maria Santos,TRUE,maria.santos@zoo.com,+1-555-0109,"speciality_bird,speciality_exotic"
+keeper_william_jones,William Jones,TRUE,william.jones@zoo.com,+1-555-0110,speciality_mammal
+keeper_sofia_garcia,Sofia Garcia,TRUE,sofia.garcia@zoo.com,+1-555-0111,speciality_primate
+keeper_thomas_mueller,Thomas Mueller,TRUE,thomas.mueller@zoo.com,+1-555-0112,"speciality_veterinary,speciality_aquatic"
+keeper_olivia_brown,Olivia Brown,TRUE,olivia.brown@zoo.com,+1-555-0113,"speciality_herbivore,speciality_mammal"
+keeper_daniel_kim,Daniel Kim,TRUE,daniel.kim@zoo.com,+1-555-0114,speciality_exotic
+keeper_isabella_rossi,Isabella Rossi,TRUE,isabella.rossi@zoo.com,+1-555-0115,"speciality_nocturnal,speciality_bird"

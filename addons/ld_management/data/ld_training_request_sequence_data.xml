@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        
+        <!-- Sequence for Training Request -->
+        <!-- Format: TR/2024/0001 -->
+        <record id="seq_ld_training_request" model="ir.sequence">
+            <field name="name">Training Request Sequence</field>
+            <field name="code">ld.training.request</field>
+            <field name="prefix">TR/%(year)s/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/> <!-- Global sequence across companies -->
+            <field name="implementation">standard</field> <!-- Optimization -->
+        </record>
+
+    </data>
+</odoo>

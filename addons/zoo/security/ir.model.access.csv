@@ -1,0 +1,17 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_zoo_animal,access_zoo_animal,model_zoo_animal,base.group_user,1,1,1,1
+access_zoo_creature,access_zoo_creature,model_zoo_creature,base.group_user,1,1,1,1
+access_zoo_cage,access_zoo_cage,model_zoo_cage,base.group_user,1,1,1,1
+access_zoo_health_record,access_zoo_health_record,model_zoo_health_record,base.group_user,1,1,1,1
+access_zoo_diet_plan,access_zoo_diet_plan,model_zoo_diet_plan,base.group_user,1,1,1,1
+access_zoo_diet_line,access_zoo_diet_line,model_zoo_diet_line,base.group_user,1,1,1,1
+access_zoo_toy_add_wizard,access_zoo_toy_add_wizard,model_zoo_toy_add_wizard,base.group_user,1,1,1,1
+access_zoo_cage_update_wizard,access_zoo_cage_update_wizard,model_zoo_cage_update_wizard,base.group_user,1,1,1,1
+access_zoo_animal_meal,access_zoo_animal_meal,model_zoo_animal_meal,base.group_user,1,1,1,1
+access_zoo_animal_feeding_wizard,access_zoo_animal_feeding_wizard,model_zoo_animal_feeding_wizard,base.group_user,1,1,1,1
+access_zoo_animal_feeding_wizard_line,access_zoo_animal_feeding_wizard_line,model_zoo_animal_feeding_wizard_line,base.group_user,1,1,1,1
+access_zoo_husbandry_task,access_zoo_husbandry_task,model_zoo_husbandry_task,base.group_user,1,1,1,1
+access_zoo_husbandry_task_line,access_zoo_husbandry_task_line,model_zoo_husbandry_task_line,base.group_user,1,1,1,1
+access_zoo_cage_checklist_template,access_zoo_cage_checklist_template,model_zoo_cage_checklist_template,base.group_user,1,1,1,1
+access_zoo_keeper_speciality,access_zoo_keeper_speciality,model_zoo_keeper_speciality,base.group_user,1,1,1,1
+access_zoo_keeper_certification,access_zoo_keeper_certification,model_zoo_keeper_certification,base.group_user,1,1,1,1

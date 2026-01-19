@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Kế thừa Form View chuẩn của Purchase Order -->
+        <record id="view_purchase_order_form_inherit_epr" model="ir.ui.view">
+            <field name="name">purchase.order.form.inherit.epr</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+
+                <!-- 1. Smart Button: Hiển thị số lượng RFQ nguồn -->
+                <div name="button_box" position="inside">
+                    <button name="action_view_epr_rfqs"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-files-o"
+                            invisible="epr_rfq_count == 0">
+                        <field name="epr_rfq_count" widget="statinfo" string="EPR RFQs"/>
+                    </button>
+
+                    <button name="action_view_epr_prs" type="object" class="oe_stat_button" icon="fa-shopping-cart" invisible="epr_pr_count == 0">
+                        <field name="epr_pr_count" widget="statinfo" string="Source PRs"/>
+                    </button>
+                </div>
+
+                <!-- 2. Tab Other Information: Hiển thị Link Many2many -->
+                <!-- Đặt readonly = 1 để không cho phép chỉnh sửa trường Source Documents (Origin của Odoo) -->
+                <xpath expr="//field[@name='origin']" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                </xpath>
+                
+                <!-- Thêm field epr_source_rfq_ids ngay sau field origin -->
+                <xpath expr="//field[@name='origin']" position="after">
+                    <field name="epr_source_rfq_ids" 
+                           widget="many2many_tags" 
+                           readonly="1"/>
+                </xpath>
+
+                <!-- 3. Purchase Order Line: Hiển thị tham chiếu chi tiết -->
+                <!-- Odoo 18 uses <list> instead of <tree> inside one2many -->
+                <xpath expr="//field[@name='order_line']/list//field[@name='name']" position="after">
+                    <field name="epr_rfq_line_id" 
+                           string="Ref. RFQ" 
+                           optional="hide" 
+                           readonly="1"/>
+                </xpath>
+
+            </field>
+        </record>
+
+        <!-- Kế thừa Search View để tìm kiếm PO theo RFQ -->
+        <record id="view_purchase_order_filter_inherit_epr" model="ir.ui.view">
+            <field name="name">purchase.order.search.inherit.epr</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.view_purchase_order_filter"/>
+            <field name="arch" type="xml">
+                <field name="origin" position="after">
+                    <!-- Search logic: Tìm PO nào có chứa RFQ Name khớp với từ khóa -->
+                    <field name="epr_source_rfq_ids" string="EPR RFQ" filter_domain="[('epr_source_rfq_ids.name', 'ilike', self)]"/>
+                </field>
+            </field>
+        </record>
+
+        <!-- Action cho menu My POs (Lọc các PO được tạo từ RFQ) -->
+        <record id="action_epr_po" model="ir.actions.act_window">
+            <field name="name">My Purchase Orders (From RFQ)</field>
+            <field name="res_model">purchase.order</field>
+            <field name="view_mode">list,form</field>
+            <field name="domain">[('epr_rfq_count', '>', 0)]</field>
+            <field name="context">{'create': False}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No Purchase Orders linked to EPR RFQs found.
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <!-- Định nghĩa Form view -->
+        <record id="zoo_animal_meal_form_view" model="ir.ui.view">
+            <field name="name">zoo.animal.meal.form.view</field>
+            <field name="model">zoo.animal.meal</field>
+            <field name="arch" type="xml">
+                <form string="Feeding Batch">
+                    <header>
+                        <button name="action_load_all_animals" string="Load All Animals" 
+                                type="object" class="btn-secondary"
+                                invisible="state != 'draft' or not creature_id"/>
+
+                        <button name="action_done" string="Confirm Feed" 
+                                type="object" class="oe_highlight"
+                                invisible="state != 'draft'"/>
+
+                        <button name="action_draft" string="Set to Draft" 
+                                type="object" 
+                                invisible="state != 'done'"/>
+
+                        <field name="state" widget="statusbar" statusbar_visible="draft,done"/>
+                    </header>
+                    <sheet>
+                        <widget name="web_ribbon" title="Fed" bg_color="bg-success" invisible="state != 'done'"/>
+
+                        <div class="oe_title">
+                            <label for="record_name" string="Batch Reference"/>
+                            <h1><field name="record_name" placeholder="e.g. Lion - Beef - 22/11/2025"/></h1>
+                        </div>
+
+                        <group>
+                            <group string="Planning">
+                                <field name="creature_id" readonly="state == 'done'"/>
+                                
+                                <field name="allowed_product_ids" invisible="1"/>
+                                
+                                <field name="product_id" readonly="state == 'done'"
+                                       options="{'no_create': True, 'no_open': True}"/>
+                                       
+                                <field name="meal_date" readonly="state == 'done'"/>
+                            </group>
+                            <group string="Quantities">
+                                <field name="qty_per_animal" readonly="state == 'done'"/>
+                                
+                                <label for="total_qty"/>
+                                <div class="o_row">
+                                    <field name="total_qty" class="fw-bold fs-4"/>
+                                    <field name="uom_id"/>
+                                </div>
+                                <field name="staff_id"/>
+                            </group>
+                        </group>
+
+                        <notebook>
+                            <page string="Animals Fed">
+                                <field name="animal_ids" readonly="state == 'done'"
+                                       widget="many2many"
+                                       domain="[('creature_id', '=', creature_id), ('is_alive', '=', True)]">
+                                    <list string="Animals" decoration-danger="is_alive == False">
+                                        <field name="name"/>
+                                        <field name="age"/> <field name="is_alive" column_invisible="True"/>
+                                    </list>
+                                </field>
+                                
+                                </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Định nghĩa List view -->
+        <record id="zoo_animal_meal_list_view" model="ir.ui.view">
+            <field name="name">zoo.animal.meal.list.view</field>
+            <field name="model">zoo.animal.meal</field>
+            <field name="arch" type="xml">
+                <list string="Feeding Batches" multi_edit="1" 
+                      decoration-muted="state == 'done'" 
+                      decoration-info="state == 'draft'">
+                    
+                    <field name="record_name" decoration-bf="1"/>
+                    <field name="meal_date"/>
+                    <field name="creature_id"/>
+                    <field name="product_id"/>
+                    
+                    <field name="animal_ids" widget="many2many_tags" optional="hide"/>
+                    
+                    <field name="qty_per_animal" optional="show"/>
+                    
+                    <field name="total_qty" sum="Total Consumed" decoration-bf="1"/>
+                    <field name="uom_id" nolabel="1"/>
+                    
+                    <field name="staff_id"/>
+                    <field name="state" widget="badge" 
+                           decoration-success="state == 'done'" 
+                           decoration-info="state == 'draft'"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Định nghĩa Kanban View -->
+        <record id="zoo_animal_meal_kanban_view" model="ir.ui.view">
+            <field name="name">zoo.animal.meal.kanban.view</field>
+            <field name="model">zoo.animal.meal</field>
+            <field name="arch" type="xml">
+                <kanban default_group_by="state" sample="1" records_draggable="false">
+                    <field name="id"/>
+                    <field name="record_name"/>
+                    <field name="creature_id"/>
+                    <field name="product_id"/>
+                    <field name="total_qty"/>
+                    <field name="uom_id"/>
+                    <field name="meal_date"/>
+                    <field name="animal_ids"/>
+                    <field name="state"/>
+
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_global_click oe_kanban_card d-flex flex-column">
+                                <div class="o_kanban_record_top mb-2">
+                                    <div class="o_kanban_record_headings">
+                                        <strong class="o_kanban_record_title">
+                                            <field name="record_name"/>
+                                        </strong>
+                                    </div>
+                                    <div class="o_kanban_top_right">
+                                        <widget name="web_ribbon" title="Done" bg_color="bg-success" invisible="state != 'done'"/>
+                                    </div>
+                                </div>
+
+                                <div class="o_kanban_content flex-grow-1">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <span class="text-muted small">Species</span><br/>
+                                            <strong><field name="creature_id"/></strong>
+                                        </div>
+                                    </div>
+                                    <div class="mt-2 text-muted fst-italic">
+                                        <i class="fa fa-cutlery me-1"/> <field name="product_id"/>
+                                    </div>
+                                    <div class="mt-2">
+                                        <span class="text-muted small">Total Food</span><br/>
+                                        <span class="badge text-bg-primary fs-6">
+                                            <field name="total_qty"/> <field name="uom_id"/>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="o_kanban_record_bottom mt-2 pt-2 border-top">
+                                    <div class="oe_kanban_bottom_left">
+                                    </div>
+                                    <div class="oe_kanban_bottom_right">
+                                        <field name="staff_id" widget="many2one_avatar_user"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <!-- Định nghĩa Action -->
+        <record id="action_zoo_animal_meal" model="ir.actions.act_window">
+            <field name="name">Animal Meals</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">zoo.animal.meal</field>
+            <field name="view_mode">list,form,kanban</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'list', 'view_id': ref('zoo_animal_meal_list_view')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('zoo_animal_meal_form_view')}),
+                (0, 0, {'view_mode': 'kanban', 'view_id': ref('zoo_animal_meal_kanban_view')}),
+                ]"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new Batch Feeding Record
+                </p>
+                <p>
+                    Track feeding sessions for multiple animals of the same species.
+                </p>
+            </field>
+        </record>
+        
+        <!-- Định nghĩa Menu -->
+        <menuitem id="menu_zoo_animal_nutrition"
+            name="Animal Nutrition"
+            sequence="50"
+            parent="menu_zoo"
+            groups="base.group_user"/>
+        
+        <menuitem id="menu_zoo_animal_meal"
+            name="Animal Meals"
+            sequence="10"
+            parent="menu_zoo_animal_nutrition"
+            action="action_zoo_animal_meal"
+            groups="base.group_user"/>
+    </data>
+</odoo>

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<odoo>
+    <data>
+        <!-- Định nghĩa inline list view cho Diet Line (embedded trong Diet Plan form) -->
+        <record id="zoo_diet_line_list_view" model="ir.ui.view">
+            <field name="name">zoo.diet.line.list.view</field>
+            <field name="model">zoo.diet.line</field>
+            <field name="arch" type="xml">
+                <list string="Ingredients" editable="bottom">
+                    <field name="product_id"/>
+                    <field name="quantity_per_day"/>
+                    <field name="uom_id"/>
+                    <field name="cost_per_unit" readonly="1"/>
+                    <field name="is_supplement"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Định nghĩa Form view cho Diet Plan -->
+        <record id="zoo_diet_plan_form_view" model="ir.ui.view">
+            <field name="name">zoo.diet.plan.form.view</field>
+            <field name="model">zoo.diet.plan</field>
+            <field name="arch" type="xml">
+                <form string="Diet Plan Details">
+                    
+                    <!-- Thanh trạng thái (Statusbar) -->
+                    <header>
+                        <!-- Các nút bấm chuyển đổi trạng thái -->
+                        <button name="action_activate" string="Activate" type="object" 
+                            class="oe_highlight" 
+                            invisible="diet_status != 'draft'"/>
+                        <button name="action_under_review" string="Send to Review" type="object" 
+                            class="oe_highlight" 
+                            invisible="diet_status != 'active'"/>
+                        <button name="action_approve" string="Approve &amp; Activate" type="object" 
+                            class="oe_highlight" 
+                            invisible="diet_status != 'under_review'"/>
+                        <button name="action_deprecate" string="Deprecate" type="object" 
+                            invisible="diet_status == 'deprecated'"/>
+                        <button name="action_reset_draft" string="Reset to Draft" type="object" 
+                            invisible="diet_status not in ('deprecated', 'under_review')"/>
+                        
+                        <!-- Trường diet_status với widget statusbar -->
+                        <field name="diet_status" widget="statusbar" statusbar_visible="draft,active,under_review,deprecated"/>
+                    </header>
+
+                    <!-- Thân Form -->
+                    <sheet>
+                        <div class="oe_title">
+                            <!-- Trường diet_plan_name -->
+                            <h1><field name="diet_plan_name" placeholder="e.g. Lion Standard Diet"/></h1>
+                        </div>
+
+                        <group>
+                            <!-- Cột Trái -->
+                            <group>
+                                <field name="creature_id"/>
+                                <field name="diet_type"/>
+                                <field name="nutritionist_id"/>
+                            </group>
+                            <!-- Cột Phải -->
+                            <group>
+                                <field name="next_review_date"/>
+                                <field name="is_active"/>
+                            </group>
+                        </group>
+
+                        <notebook>
+                            <!-- Tab 1: Ingredients (Embedded List) -->
+                            <page string="Ingredients" name="ingredients">
+                                <field name="ingredient_ids">
+                                    <list editable="bottom">
+                                        <field name="product_id"/>
+                                        <field name="quantity_per_day"/>
+                                        <field name="uom_id"/>
+                                        <field name="cost_per_unit" readonly="1"/>
+                                        <field name="is_supplement"/>
+                                    </list>
+                                </field>
+                            </page>
+
+                            <!-- Tab 2: Notes -->
+                            <page string="Preparation Notes" name="notes">
+                                <field name="notes" 
+                                    widget="html"
+                                    placeholder="Ghi rõ hướng dẫn pha chế, bảo quản, và lưu ý đặc biệt..."
+                                />
+                            </page>
+                        </notebook>
+                    </sheet>
+
+                    <!-- Chatter -->
+                    <!-- <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div> -->
+                </form>
+            </field>
+        </record>
+
+        <!-- Định nghĩa List view cho Diet Plan -->
+        <record id="zoo_diet_plan_list_view" model="ir.ui.view">
+            <field name="name">zoo.diet.plan.list.view</field>
+            <field name="model">zoo.diet.plan</field>
+            <field name="arch" type="xml">
+                <list string="Diet Plans" default_order="diet_plan_name">
+                    <field name="diet_plan_name"/>
+                    <field name="creature_id"/>
+                    <field name="diet_type"/>
+                    <field name="nutritionist_id"/>
+                    <field name="next_review_date"/>
+                    <field name="diet_status" 
+                        decoration-success="diet_status == 'active'"
+                        decoration-warning="diet_status == 'under_review'"
+                        decoration-info="diet_status == 'draft'"
+                        decoration-muted="diet_status == 'deprecated'"/>
+                    <field name="is_active"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Định nghĩa Action -->
+        <record id="action_zoo_diet_plan" model="ir.actions.act_window">
+            <field name="name">Diet Plans</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">zoo.diet.plan</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'list', 'view_id': ref('zoo_diet_plan_list_view')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('zoo_diet_plan_form_view')})]"/>
+        </record>
+
+        <!-- Định nghĩa Menu -->
+        <menuitem id="menu_zoo_diet_plan"
+            name="Animal Diet Plans"
+            action="action_zoo_diet_plan"
+            sequence="20"
+            parent="menu_zoo_animal_nutrition"
+            groups="base.group_user"/>
+
+    </data>
+</odoo>

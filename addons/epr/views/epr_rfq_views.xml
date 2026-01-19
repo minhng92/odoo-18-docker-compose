@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- ============================================================ -->
+        <!-- LIST VIEW -->
+        <!-- ============================================================ -->
+        <record id="view_epr_rfq_list" model="ir.ui.view">
+            <field name="name">epr.rfq.list</field>
+            <field name="model">epr.rfq</field>
+            <field name="arch" type="xml">
+                <!-- decoration-muted: Làm mờ dòng nếu trạng thái là 'cancel' -->
+                <list string="RFQs" decoration-muted="state == 'cancel'" sample="1">
+                    <field name="name" decoration-bf="1"/>
+                    <field name="partner_id" widget="many2one_avatar"/>
+                    <field name="date_order" widget="date"/>
+                    <field name="date_deadline" widget="remaining_days" optional="show"/>
+                    <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+                    <field name="currency_id" column_invisible="True"/>
+                    
+                    <!-- Badge hiển thị trạng thái với màu sắc -->
+                    <field name="state" 
+                           widget="badge" 
+                           decoration-info="state == 'draft'"
+                           decoration-warning="state in ('sent', 'received')"
+                           decoration-success="state == 'confirmed'"
+                           decoration-danger="state == 'cancel'"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- ============================================================ -->
+        <!-- FORM VIEW -->
+        <!-- ============================================================ -->
+        <record id="view_epr_rfq_form" model="ir.ui.view">
+            <field name="name">epr.rfq.form</field>
+            <field name="model">epr.rfq</field>
+            <field name="arch" type="xml">
+                <form string="Request for Quotation">
+                    <!-- HEADER: Thanh trạng thái và các nút hành động -->
+                    <header>
+                        <!-- Các nút bấm (Placeholder) - Bạn cần định nghĩa hàm python tương ứng -->
+                        <button name="action_send_email"
+                                string="Send to Vendor"
+                                type="object"
+                                class="oe_highlight"
+                                invisible="state != 'draft'"/>
+                        
+                        <button name="action_mark_received"
+                                string="Mark as Received"
+                                type="object"
+                                class="oe_highlight"
+                                invisible="state != 'sent'"/>
+                        
+                        <button name="action_submit_approval"
+                                string="Get Approval"
+                                type="object"
+                                class="oe_highlight"
+                                invisible="state != 'received'"/>
+                        
+                        <button name="action_reject"
+                                string="Reject"
+                                type="object"
+                                class="btn-danger"
+                                invisible="state != 'to_approve'"/>
+                        
+                        <button name="action_confirm"
+                                string="Confirm RFQ"
+                                type="object"
+                                class="oe_highlight"
+                                invisible="state != 'approved'"/>
+                        
+                        <button name="action_cancel_rfq"
+                                string="Cancel RFQ"
+                                type="object"
+                                class="oe_highlight"
+                                invisible="state == 'cancel'"/>
+                        
+                        <button name="action_create_po"
+                                string="Create Purchase Order"
+                                type="object"
+                                class="btn-primary"
+                                invisible="state != 'confirmed'"/>
+                        
+                        <button name="action_reset_draft"
+                                string="Reset to Draft"
+                                type="object"
+                                class="btn-warning"
+                                invisible="state not in ('sent', 'to_approve', 'approved', 'rejected', 'cancel')"/>
+
+                        <!-- Widget Statusbar: Hiển thị quy trình -->
+                        <field name="state" widget="statusbar" statusbar_visible="draft,sent,received,to_approve,approved,confirmed,rejected"/>
+                    </header>
+
+                    <sheet>
+                        <!-- SMART BUTTON AREA -->
+                        <!-- Button POs: Hiển thị số lượng POs liên quan -->
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_purchase_orders"
+                                    type="object"
+                                    class="oe_stat_button"
+                                    icon="fa-shopping-cart"
+                                    invisible="purchase_count == 0">
+                                <field name="purchase_count" widget="statinfo" string="POs"/>
+                            </button>
+                            
+                            <!-- Button PRs: Hiển thị số lượng PRs liên quan -->
+                            <button name="action_view_source_requests"
+                                    type="object"
+                                    class="oe_stat_button"
+                                    icon="fa-file-text-o"
+                                    invisible="request_count == 0">
+                                <field name="request_count" widget="statinfo" string="PRs"/>
+                            </button>
+                        </div>
+
+                        <!-- TITLE: Số phiếu RFQ -->
+                        <div class="oe_title">
+                            <span class="o_form_label">Request for Quotation</span>
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+
+                        <!-- GROUP: Thông tin chính -->
+                        <group>
+                            <group>
+                                <!-- Readonly logic: Chỉ cho sửa khi nháp -->
+                                <field name="partner_id" widget="res_partner_many2one" context="{'show_address': 1}" readonly="state != 'draft'"/>
+                                <field name="request_ids" widget="many2many_tags" readonly="state != 'draft'"/>
+                                <field name="currency_id" groups="base.group_multi_currency" readonly="state != 'draft'"/>
+                            </group>
+                            <group>
+                                <field name="date_order" readonly="state != 'draft'"/>
+                                <field name="date_deadline" readonly="state != 'draft'"/>
+                                <field name="company_id" groups="base.group_multi_company" readonly="1"/>
+                                <field name="active" invisible="1"/>
+                            </group>
+                        </group>
+
+                        <!-- NOTEBOOK: Tab chi tiết -->
+                        <notebook>
+                            <page string="Products" name="products">
+                                <field name="line_ids" readonly="state not in ('draft', 'received')">
+                                    <list editable="bottom">
+                                        <field name="product_id" readonly="parent.state != 'draft'"/>
+                                        <field name="description" optional="show"/>
+                                        <field name="quantity" readonly="parent.state not in ('draft', 'received')"/>
+                                        <field name="uom_id" groups="uom.group_uom" readonly="parent.state != 'draft'"/>
+                                        <field name="price_unit" readonly="parent.state not in ('draft', 'received')"/>
+                                        <field name="taxes_id" widget="many2many_tags" optional="show" readonly="parent.state not in ('draft', 'received')"/>
+                                        
+                                        <!-- Monetary: Tự động hiển thị ký hiệu tiền tệ dựa trên currency_id -->
+                                        <field name="subtotal" widget="monetary"/>
+                                        <field name="currency_id" column_invisible="True"/>
+                                    </list>
+                                </field>
+                                
+                                <!-- Khu vực tổng tiền bên phải -->
+                                <group name="note_group" col="6" class="mt-2 mt-md-0">
+                                    <group class="oe_subtotal_footer oe_right" colspan="2" name="sale_total">
+                                        <field name="amount_total" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    </group>
+                                    <div class="oe_clear"/>
+                                </group>
+                            </page>
+                            
+                            <page string="Other Info" name="other_info">
+                                <group>
+                                    <field name="purchase_ids" widget="many2many_tags" readonly="1"/>
+                                </group>
+                            </page>
+
+                            <page string="Approval Matrix" name="approval_matrix">
+                                <field name="approval_entry_ids" readonly="1">
+                                    <list editable="bottom" create="0" delete="0" decoration-success="status=='approved'" decoration-danger="status=='rejected'">
+                                        <field name="sequence" widget="handle"/>
+                                        <field name="name"/>
+                                        <field name="required_user_ids" widget="many2many_tags"/>
+                                        <field name="status" widget="badge" 
+                                               decoration-info="status == 'new'" 
+                                               decoration-success="status == 'approved'"
+                                               decoration-muted="status == 'pending'"/>
+                                        <field name="actual_user_id"/>
+                                        <field name="approval_date"/>
+                                        <field name="rejection_reason"/>
+                                        <field name="can_approve" column_invisible="True"/>
+                                        
+                                        <!-- Buttons -->
+                                        <button name="action_approve_line" string="Approve" type="object" 
+                                                icon="fa-check" class="text-success"
+                                                invisible="not can_approve"/>
+                                        <button name="action_reject_line" string="Reject" type="object" 
+                                                icon="fa-times" class="text-danger"
+                                                invisible="not can_approve"/>
+                                    </list>
+                                </field>
+                            </page>
+
+                            <page string="Source Requests" name="source_requests">
+                                <field name="request_ids" readonly="1">
+                                    <list>
+                                        <field name="name"/>
+                                        <field name="employee_id"/>
+                                        <field name="date_required"/>
+                                        <field name="state" widget="badge"/>
+                                    </list>
+                                </field>
+                            </page>
+
+                        </notebook>
+                        
+                    </sheet>
+                    
+                    <!-- CHATTER: Khu vực lịch sử và tin nhắn -->
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <!-- ============================================================ -->
+        <!-- SEARCH VIEW -->
+        <!-- ============================================================ -->
+        <record id="view_epr_rfq_search" model="ir.ui.view">
+            <field name="name">epr.rfq.search</field>
+            <field name="model">epr.rfq</field>
+            <field name="arch" type="xml">
+                <search string="Search RFQ">
+                    <field name="name"/>
+                    <field name="partner_id"/>
+                    <field name="request_ids"/>
+
+                    <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
+                    <filter string="Sent" name="sent" domain="[('state', '=', 'sent')]"/>
+                    <filter string="Late" name="late" domain="[('date_deadline', '&lt;', current_date), ('state', 'in', ('draft', 'sent'))]"/>
+                    
+                    <separator/>
+                    <filter string="Archived" name="archived" domain="[('active', '=', False)]"/>
+
+                    <group expand="0" string="Group By">
+                        <filter string="Vendor" name="vendor" context="{'group_by': 'partner_id'}"/>
+                        <filter string="Status" name="status" context="{'group_by': 'state'}"/>
+                        <filter string="Order Date" name="order_date" context="{'group_by': 'date_order'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- ============================================================ -->
+        <!-- ACTION -->
+        <!-- ============================================================ -->
+        <record id="action_epr_rfq" model="ir.actions.act_window">
+            <field name="name">Requests for Quotation</field>
+            <field name="res_model">epr.rfq</field>
+            <field name="view_mode">list,form</field>
+            <field name="search_view_id" ref="view_epr_rfq_search"/>
+            <field name="help" type="html">
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'list', 'view_id': ref('view_epr_rfq_list')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('view_epr_rfq_form')})]"/>
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first Request for Quotation (RFQ)
+                </p>
+                <p>
+                    Manage your vendor negotiations and create Purchase Orders directly from RFQs.
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

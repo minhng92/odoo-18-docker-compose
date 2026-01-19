@@ -1,0 +1,16 @@
+name,capacity,location,cage_type,area,description,active
+Savanna Habitat,10,North Wing,outdoor,500.5,Large outdoor habitat for African animals,True
+Rainforest Pavilion,8,East Wing,indoor,350.0,Climate-controlled rainforest environment,True
+Arctic Zone,6,South Wing,outdoor,400.0,Cold climate habitat with ice features,True
+Aquatic Center,15,West Wing,aquarium,600.0,Large aquarium for marine life,True
+Bird Sanctuary,20,Central Area,aviary,450.0,Open-air aviary with netting,True
+Desert Dome,5,North Wing,indoor,300.0,Heated desert environment,True
+Primate Paradise,12,East Wing,outdoor,380.0,Multi-level jungle gym for primates,True
+Reptile House,10,South Wing,indoor,250.0,Temperature-controlled reptile habitat,True
+Polar Pavilion,4,West Wing,indoor,320.0,Frozen tundra simulation,True
+Safari Plains,25,Central Area,outdoor,800.0,Large plains for grazing animals,True
+Tropical Reef,20,East Wing,aquarium,550.0,Coral reef ecosystem,True
+Mountain Ridge,8,North Wing,outdoor,420.0,Rocky mountain terrain,True
+Nocturnal Gallery,6,South Wing,indoor,180.0,Dark environment for nocturnal animals,True
+Penguin Cove,15,West Wing,outdoor,400.0,Icy pool for penguins,True
+Butterfly Garden,30,Central Area,aviary,200.0,Glass dome for butterflies,True

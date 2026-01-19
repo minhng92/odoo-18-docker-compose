@@ -1,0 +1,11 @@
+name,environment,is_rare
+Lion,ground,False
+Tiger,forest,True
+Elephant,ground,False
+Giraffe,ground,False
+Zebra,ground,False
+Penguin,cool,False
+Polar Bear,cool,True
+Dolphin,ocean,False
+Shark,sea,True
+Eagle,sky,False
